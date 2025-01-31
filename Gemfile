@@ -11,4 +11,6 @@ group :developement, :test do
   gem 'minitest', '~> 5.0'
 
   gem 'rubocop'
+
+  gem 'bundler-audit'
 end
