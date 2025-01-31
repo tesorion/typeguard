@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "validator/version"
+require_relative 'validator/version'
 
 module Yard
   module Validator

@@ -1,18 +1,18 @@
 # frozen_string_literal: true
 
-require_relative "lib/yard/validator/version"
+require_relative 'lib/yard/validator/version'
 
 Gem::Specification.new do |spec|
-  spec.name = "yard-validator"
+  spec.name = 'yard-validator'
   spec.version = Yard::Validator::VERSION
-  spec.authors = ["Tesorion"]
-  spec.email = ["QmanageDevelopment@tesorion.nl"]
+  spec.authors = ['Tesorion']
+  spec.email = ['QmanageDevelopment@tesorion.nl']
 
-  spec.summary = "Validate YARD signatures"
+  spec.summary = 'Validate YARD signatures'
   spec.homepage = 'https://github.com/tesorion/typeguard'
   spec.required_ruby_version = '>= 3.1'
 
-  spec.metadata["homepage_uri"] = spec.homepage
+  spec.metadata['homepage_uri'] = spec.homepage
 
   # Specify which files should be added to the gem when it is released.
   # The `git ls-files -z` loads the files in the RubyGem that have been added into git.
@@ -21,11 +21,11 @@ Gem::Specification.new do |spec|
       (f == __FILE__) || f.match(%r{\A(?:(?:bin|test|spec|features)/|\.(?:git|travis|circleci)|appveyor)})
     end
   end
-  spec.bindir = "exe"
+  spec.bindir = 'exe'
   spec.executables = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
-  spec.require_paths = ["lib"]
+  spec.require_paths = ['lib']
 
-  spec.add_dependency "yard"
+  spec.add_dependency 'yard'
 
   # For more information and examples about making a new gem, check out our
   # guide at: https://bundler.io/guides/creating_gem.html
