@@ -1,0 +1,23 @@
+PATH
+  remote: .
+  specs:
+    yard-validator (0.1.0)
+      yard
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    minitest (5.25.4)
+    rake (13.2.1)
+    yard (0.9.37)
+
+PLATFORMS
+  x86_64-linux
+
+DEPENDENCIES
+  minitest (~> 5.0)
+  rake (~> 13.0)
+  yard-validator!
+
+BUNDLED WITH
+   2.3.15
