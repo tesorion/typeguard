@@ -2,6 +2,7 @@
 
 module Yard::Initializer
   class YardocInitializer
+    # ruby -e "require 'yard';YARD::Registry.load('.yardoc');YARD::Registry.all.each {|m|pp m;m.tags.each {|t|pp t};puts }"
     require 'yard'
 
     # @param  [String] target .yardoc file
@@ -55,9 +56,25 @@ module Yard::Initializer
   end
 
   class RBSInitalizer
+    #  ruby -e "require 'rbs';loader=RBS::EnvironmentLoader.new(core_root: nil);loader.add(path:Pathname('sig'));environment=RBS::Environment.from_loader(loader);environment.declarations.each{|cls,entries|pp cls;pp entries}"
+    require 'rbs'
+    # https://github.com/ruby/rbs/blob/master/docs/architecture.md
+    # RBS files
+    #   ↓         -- RBS::Parser
+    # Syntax tree
+    #   ↓
+    # Environment
+    #   ↓        -- Definition builder
+    # Definition
+    #
+    # RBS::Parser.parse_method_type parsers a method type. ([T] (String) { (IO) -> T } -> Array[T])
+    # RBS::Parser.parse_type parses a type. (Hash[Symbol, untyped])
+    # RBS::Parser.parse_signature parses the whole RBS file.
     # @return [Yard::Initializer::RBSInitalizer] initializer for RBS signatures
     def initialize
-      raise NotImplementedError
+      rbs_loader = RBS::EnvironmentLoader.new(core_root: nil)
+      rbs_loader.add(path: Pathname('sig'))
+      @rbs_env = RBS::Environment.from_loader(@rbs_loader)
     end
   end
 

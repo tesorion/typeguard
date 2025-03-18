@@ -28,5 +28,8 @@ module Yard
     def test_validator
       assert_raises TypeError do Calc.new.sub(1, '2') end
     end
+
+    def test_rbs_validator
+    end
   end
 end
