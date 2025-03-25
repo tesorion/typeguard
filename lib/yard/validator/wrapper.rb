@@ -68,8 +68,6 @@ module Yard
             "Sig: #{sig.name}\n"
           end
         end
-        # NOTE: initialize is private by default, but YARD assumes public
-        # visibility = object.name == :initialize ? :private : object.visibility
         define_wrapper(mod, original_method, sig)
         target.send(actual_visibility, method_name)
       end
