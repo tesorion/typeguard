@@ -1,8 +1,15 @@
 # frozen_string_literal: true
 
 module Yard::Main
-  # typed_modules = Yard::Initializer::YardocInitializer.new('.yardoc').resolve_types
-  # Yard::Wrapper::PrependWrapper.new(typed_modules).wrap_all
   builder = Yard::TypeModel::Builder::YardBuilder.new('.yardoc')
-  builder.build
+  definitions = builder.build
+  resolver = Yard::Resolution::Resolver.new(definitions)
+  resolver.resolve!
+  wrapper = Yard::Validation::Wrapper.new(definitions)
+  wrapper.wrap!
+  calc = Calc.new(1)
+  calc.sub(5, 1)
+  calc.dict('sym'.to_sym, [{ a: 1, b: 2 }])
+  calc.truthy(false)
+  z
 end

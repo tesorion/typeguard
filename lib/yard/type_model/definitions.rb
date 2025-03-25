@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Yard
   module TypeModel
     module Definitions
@@ -41,12 +43,23 @@ module Yard
       end
 
       class ParameterDefinition
-        attr_reader :name, :source, :types
+        attr_reader :name, :source, :types, :type_strings
 
-        def initialize(name:, source:, types:)
+        def initialize(name:, source:, types:, type_strings:)
           @name = name
           @source = source
           @types = types
+          @type_strings = type_strings
+        end
+      end
+
+      class ReturnDefinition
+        attr_reader :source, :types, :type_strings
+
+        def initialize(source:, types:, type_strings:)
+          @source = source
+          @types = types
+          @type_strings = type_strings
         end
       end
     end

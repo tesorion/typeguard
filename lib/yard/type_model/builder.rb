@@ -1,9 +1,12 @@
+# frozen_string_literal: true
+
 module Yard
   module TypeModel
     module Builder
       class YardBuilder
         include Yard::TypeModel::Definitions
         require 'yard'
+        # ruby -e "require 'yard';YARD::Registry.load('.yardoc');YARD::Registry.all.each {|m|pp m;m.tags.each {|t|pp t};puts }"
 
         def initialize(target)
           YARD::Registry.load!(target)
@@ -18,7 +21,7 @@ module Yard
           when YARD::CodeObjects::NamespaceObject
             members = object.children.map { |child| build_object(child) }.compact
 
-            # TODO: handle initializer parameters
+            # TODO: type parameters? #initialize captured by :methods
             if object.is_a?(YARD::CodeObjects::ClassObject)
               ClassDefinition.new(
                 name: object.path,
@@ -40,16 +43,23 @@ module Yard
               ParameterDefinition.new(
                 name: tag.name.to_sym,
                 source: "#{object.file}:#{object.line}",
-                types: build_types(tag)
+                types: build_types(tag),
+                type_strings: tag.types
               )
             end
+            return_tag = object.tag(:return)
+            returns = ReturnDefinition.new(
+              source: "#{object.file}:#{object.line}",
+              types: build_types(return_tag),
+              type_strings: return_tag.respond_to?(:types) ? return_tag.types : []
+            )
             MethodDefinition.new(
               name: object.name,
               source: "#{object.file}:#{object.line}",
               scope: object.scope,
               visibility: object.visibility,
               parameters: parameters,
-              returns: build_types(object.tag(:return))
+              returns: returns
             )
           when YARD::CodeObjects::ConstantObject, YARD::CodeObjects::ClassVariableObject
             raise "Not implemented: #{object.class}"
@@ -59,24 +69,16 @@ module Yard
         end
 
         def build_types(tag)
-          types = tag.respond_to?(:types) ? tag.types : []
-          case types.size
-          when 0
-            TypeNode.new(
+          if tag.respond_to?(:types) && !tag.types.empty?
+            tag.types.map do |type|
+              Yard::TypeModel::Parser::YardParser.parse(type)
+            end
+          else
+            [] << TypeNode.new(
               kind: :untyped,
-              shape: :empty,
+              shape: :untyped,
               children: [],
               metadata: { note: 'Types specifier list is empty: untyped' }
-            )
-          when 1
-            Yard::TypeModel::Parser::YardParser.parse(tag.types.first)
-          else
-            children = tag.types.map { |t| Yard::TypeModel::Parser::YardParser.parse(t) }
-            TypeNode.new(
-              kind: :types,
-              shape: :union,
-              children: children,
-              metadata: { note: 'Object is one of the types defined by children' }
             )
           end
         end
@@ -84,6 +86,20 @@ module Yard
 
       class RBSBuilder
         require 'rbs'
+        #  ruby -e "require 'rbs';loader=RBS::EnvironmentLoader.new(core_root: nil);loader.add(path:Pathname('sig'));environment=RBS::Environment.from_loader(loader);environment.declarations.each{|cls,entries|pp cls;pp entries}"
+        # https://github.com/ruby/rbs/blob/master/docs/architecture.md
+        # RBS files
+        #   ↓         -- RBS::Parser
+        # Syntax tree
+        #   ↓
+        # Environment
+        #   ↓        -- Definition builder
+        # Definition
+        #
+        # RBS::Parser.parse_method_type parsers a method type. ([T] (String) { (IO) -> T } -> Array[T])
+        # RBS::Parser.parse_type parses a type. (Hash[Symbol, untyped])
+        # RBS::Parser.parse_signature parses the whole RBS file.
+        # @return [Yard::Initializer::RBSInitalizer] initializer for RBS signatures
         def initialize(target)
           rbs_loader = RBS::EnvironmentLoader.new(core_root: nil)
           rbs_loader.add(path: Pathname(target))

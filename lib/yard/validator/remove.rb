@@ -1,4 +1,10 @@
 class Calc
+  # @param x [Integer]
+  def initialize(x); end
+
+  # @return somevar [Integer]
+  attr_accessor :somevar
+
   # @param [Integer, Float] lhs
   # @param [Integer, Array<Integer, Array<Float>>] rhs
   # @return [Integer, Float] Addition
@@ -45,4 +51,10 @@ class Calc
   # def read_ducky(obj)
   #   obj.read
   # end
+end
+
+# Something something
+# @return [Integer]
+def z
+  1
 end

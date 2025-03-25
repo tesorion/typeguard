@@ -1,85 +1,94 @@
 # frozen_string_literal: true
 
-module Yard::Wrapper
-  class PrependWrapper
-    # @param [Hash<String, Hash<String, Hash>>] typed_modules simplified registry
-    # @return [Yard::Wrapper::PrependWrapper]
-    def initialize(typed_modules)
-      @typed_modules = typed_modules
-    end
+module Yard
+  module Validation
+    class Wrapper
+      include Yard::TypeModel::Definitions
 
-    # @return [void]
-    def wrap_all
-      @typed_modules.each do |mod, methods|
-        wrapper = Module.new
-        methods.each do |method_name, type_info|
-          visibility =
-            if mod.private_method_defined?(method_name)
-              :private
-            elsif mod.protected_method_defined?(method_name)
-              :protected
-            else
-              nil # Infer :public
-            end
-          validator = create_validator(method_name, **type_info)
-          validator.module_eval { send(visibility, method_name) } if visibility
-          wrapper.prepend(validator)
-          puts <<~HEREDOC
-            Wrapping method in #{mod}:
-              name    = #{method_name}
-              params  = #{type_info[:params]}
-              returns = #{type_info[:returns]}
-          HEREDOC
-        end
-        mod.prepend(wrapper)
+      def initialize(definitions)
+        @definitions = definitions
       end
-    end
 
-    # TODO: replace prepend approach with define_method&method_added
-    def create_validator(method_name, params:, returns:)
-      Module.new do
-        # @param [Object] arg Method argument to type validate
-        # @param [Yard::Initializer::TypeNode] type_node Types to validate against
-        # @return [Boolean] true if correct type, false if mismatched
-        def validate_call(arg, type_node)
-          return true if type_node == :void
-          return false unless arg.is_a?(type_node.root)
-          return true if type_node.children.empty?
-
-          # return false unless arg.respond_to?(:each)
-          if type_node.root == Array
-            if type_node.children.size == 1
-              return arg.all? do |element|
-                validate_call(element, type_node.children.first)
-              end
-            end
-
-            return arg.all? do |element|
-              type_node.children.any? { |sub_type| validate_call(element, sub_type) }
-            end
-
+      def wrap!
+        @definitions.each do |definition|
+          case definition
+          when ModuleDefinition, ClassDefinition
+            # Type model does not have nested modules/definitions, no recursion
+            mod = Object.const_get(definition.name)
+            definition.members.grep(MethodDefinition) { |sig| wrap_method(mod, sig) }
+          when MethodDefinition
+            # Method defined in root, as a private instance method of Object
+            wrap_method(Object, definition)
+          else
+            raise "Unexpected definition: #{definition}"
           end
-          false
         end
+      end
 
-        define_method(method_name) do |*args, **kwargs, &block|
-          params.each_with_index do |param, i|
-            expected = param[:types]
-            arg = args[i]
-            unless expected.any? { |type_node| validate_call(arg, type_node) }
-              raise TypeError,
-                    "Incorrect type for #{param[:name]}: received #{arg.class} but expected #{expected.map(&:to_s).join(',')}"
+      def wrap_method(mod, sig)
+        target = sig.scope == :class ? mod.singleton_class : mod
+        # use sym name instead of string?
+        method_name = sig.name
+        original_method = target.instance_method(method_name)
+        expected_arity = sig.parameters.size
+        actual_arity = original_method.parameters.count
+        unless expected_arity == actual_arity
+          # TODO: check/raise if configured
+          raise "Expected arity of '#{expected_arity}' but received '#{actual_arity}'.\n" \
+                "Module: #{mod}\n" \
+                "Sig: #{sig.name}\n"
+        end
+        expected_visibility = sig.visibility
+        actual_visibility =
+          if target.public_instance_methods(false).include?(method_name)
+            :public
+          elsif target.protected_instance_methods(false).include?(method_name)
+            :protected
+          elsif target.private_instance_methods(false).include?(method_name)
+            :private
+          else
+            :public
+          end
+        unless expected_visibility == actual_visibility
+          if expected_visibility == :public && actual_visibility == :private
+            if sig.name == :initialize
+              # Initialize is private by default, ignore
+            elsif mod == Object
+              # Methods on Object (root) are private by default, ignore
+            else
+              # TODO: check/raise if configured
+              raise "Expected visibility of public but received private.\n" \
+              "Module: #{mod}\n" \
+              "Sig: #{sig.name}\n"
             end
+          else
+            # TODO: check/raise if configured
+            raise "Expected visibility of '#{expected_visibility}' but received '#{actual_visibility}'.\n" \
+            "Module: #{mod}\n" \
+            "Sig: #{sig.name}\n"
           end
-          result = super(*args, **kwargs, &block)
-          return result if returns.include?(:void)
+        end
+        # NOTE: initialize is private by default, but YARD assumes public
+        # visibility = object.name == :initialize ? :private : object.visibility
+        define_wrapper(mod, original_method, sig)
+        target.send(actual_visibility, method_name)
+      end
 
-          unless returns.any? { |type_node| validate_call(result, type_node) }
-            raise TypeError,
-                  "Incorrect return type: received #{result.class} but expected #{returns.map(&:to_s).join(',')}"
-          end
-
-          result
+      def define_wrapper(mod, method, sig)
+        required_params = method.parameters.all? { |type, _| type == :req } && sig.parameters.size <= 5
+        simple_params = required_params && sig.parameters.all? do |param|
+          param.types.size == 1 && param.types.first.shape == :basic
+        end
+        simple_return = sig.returns.types.size == 1 && sig.returns.types.first.shape == :basic
+        any_return = sig.returns.types.all? do |type|
+          type.shape == :untyped || %i[void self].include?(type.kind)
+        end
+        if simple_params && simple_return
+          Validator.standard_path(mod, method, sig)
+        elsif simple_params && any_return
+          Validator.fastest_path(mod, method, sig)
+        else
+          Validator.exhaustive_path(mod, method, sig)
         end
       end
     end
