@@ -1,17 +1,10 @@
-class Calc
-  # @param x [Integer]
-  def initialize(x); end
-
-  # @return somevar [Integer]
-  attr_accessor :somevar
-
+class Example
   # @param [Integer, Float] lhs
   # @param [Integer, Array<Integer, Array<Float>>] rhs
   # @return [Integer, Float] Addition
   def sum(lhs, rhs)
     lhs + Array(rhs).flatten.sum
   end
-  protected :sum
 
   # @param (see #sum)
   # @return [Float] Subtraction
@@ -39,18 +32,19 @@ class Calc
   def truthy(expression)
     !expression
   end
+  protected :truthy
 
-  # # @param [#to_s] obj
-  # # @return [String] Object to string
-  # def ducky(obj)
-  #   obj.to_s
-  # end
+  # @param [#to_s] obj
+  # @return [String] Object to string
+  def ducky(obj)
+    obj.to_s
+  end
 
-  # # @param [#read] obj
-  # # @return [void]
-  # def read_ducky(obj)
-  #   obj.read
-  # end
+  # @param [#push] obj
+  # @return [void]
+  def push_ducky(obj)
+    obj.push(1)
+  end
 end
 
 # Something something
@@ -58,3 +52,14 @@ end
 def z
   1
 end
+
+# yardoc lib/yard/validator/example.rb && ruby lib/yard/validator/example.rb
+require_relative '../validator'
+Yard::Main.load_enable_yard('.yardoc')
+example = Example.new
+example.sub(1, 5)
+example.dict(:something, [{ a: 1 << 1, b: 1 << 2 }])
+example.ducky(BasicObject)
+example.push_ducky([])
+# Sum raises an error, expected float for last number: Array<Integer, Array<Float>>
+example.sum(1, [2, 4, 8, [1.0, 2.0, 2.5, 3.0], 16, [0.5, 5]])

@@ -122,7 +122,7 @@ module Yard
 
     class Duck < Base
       def initialize(node)
-        @name = node.kind.sub(/^#/, '')
+        @name = node.kind[1..]
       end
 
       def valid?(value)
