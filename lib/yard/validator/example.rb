@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Example
   # @param [Integer, Float] lhs
   # @param [Integer, Array<Integer, Array<Float>>] rhs
