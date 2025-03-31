@@ -1,37 +1,47 @@
 # frozen_string_literal: true
 
+require 'dry-configurable'
+
 module Yard
-  module Configuration
-    attr_reader :enabled, :raise_on_failure, :report_on_failure, :document_untyped, :report_untyped
+  extend Dry::Configurable
 
-    @enabled = false
-    @raise_on_failure = false
-    @report_on_failure = false
-    @document_untyped = false
-    @report_untyped = false
+  SUPPORTED_SOURCES = %i[yard rbs].freeze
 
-    def enable
-      @enabled = true
-    end
+  setting :enabled, default: false
 
-    def enable_raise_on_failure
-      @raise_on_failure = true
-    end
+  setting :source, default: :yard, reader: true, constructor: proc { |value|
+    raise "Config source must be one of #{SUPPORTED_SOURCES}" unless SUPPORTED_SOURCES.include?(value)
 
-    def enable_report_on_failure
-      @report_on_failure = true
-    end
+    value
+  }
+  setting :target, reader: true
 
-    def enable_document_untyped
-      @document_untyped = true
-    end
+  setting :reparse, default: false, reader: true, constructor: proc { |value|
+    raise 'Config reparse must be true or false' unless value.is_a?(TrueClass) || value.is_a?(FalseClass)
 
-    def enable_report_untyped
-      @report_untyped = true
-    end
+    value
+  }
 
-    def disable
-      @enabled = false
-    end
+  setting :at_exit_report, default: false, constructor: proc { |value|
+    raise 'Config at_exit_report must be true or false' unless value.is_a?(TrueClass) || value.is_a?(FalseClass)
+
+    value
+  }
+
+  # TODO: implement flags below
+  setting :raise_on_failure, default: true
+  setting :report_on_failure, default: true
+  setting :document_untyped, default: true
+  setting :report_untyped, default: true
+
+  def self.process!
+    return unless config.enabled
+
+    builder = Yard::TypeModel::Builder.send(config.source)
+    definitions = builder.new(config.target, config.reparse).build
+    Yard::Resolution::Resolver.new(definitions).resolve!
+    Yard::Validation::Wrapper.new(definitions).wrap!
+
+    at_exit { Yard::Metrics.flush } if config.at_exit_report
   end
 end

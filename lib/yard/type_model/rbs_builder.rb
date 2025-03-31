@@ -21,7 +21,7 @@ module Yard
         # RBS::Parser.parse_type parses a type. (Hash[Symbol, untyped])
         # RBS::Parser.parse_signature parses the whole RBS file.
         # @return [Yard::Initializer::RBSInitalizer] initializer for RBS signatures
-        def initialize(target)
+        def initialize(target, _reparse)
           rbs_loader = RBS::EnvironmentLoader.new(core_root: nil)
           rbs_loader.add(path: Pathname(target))
           @rbs_env = RBS::Environment.from_loader(rbs_loader)

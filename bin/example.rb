@@ -63,8 +63,19 @@ class Example
 end
 
 require_relative '../lib/yard/validator'
-Yard::Main.load_enable_yard(['bin/example.rb'], false)
-at_exit { Yard::Metrics.flush }
+
+Yard.configure do |config|
+  config.enabled = true
+  config.source = :yard
+  config.target = ['bin/example.rb']
+  config.reparse = true
+  config.at_exit_report = true
+
+  config.raise_on_failure = false
+  config.report_on_failure = false
+  config.document_untyped = false
+  config.report_untyped = false
+end.process!
 
 example = Example.new
 example_methods = Example.instance_methods(false)
