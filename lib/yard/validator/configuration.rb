@@ -35,7 +35,10 @@ module Yard
   setting :report_untyped, default: true
 
   def self.process!
-    return unless config.enabled
+    unless config.enabled
+      puts 'WARNING: yard-validator disabled'
+      return
+    end
 
     builder = Yard::TypeModel::Builder.send(config.source)
     definitions = builder.new(config.target, config.reparse).build

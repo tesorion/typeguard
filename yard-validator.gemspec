@@ -28,6 +28,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'dry-configurable'
   spec.add_dependency 'rbs'
   spec.add_dependency 'yard'
+  spec.add_dependency 'zeitwerk', '~> 2.6.0'
 
   # For more information and examples about making a new gem, check out our
   # guide at: https://bundler.io/guides/creating_gem.html

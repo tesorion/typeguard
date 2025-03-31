@@ -5,6 +5,7 @@ PATH
       dry-configurable
       rbs
       yard
+      zeitwerk (~> 2.6.0)
 
 GEM
   remote: https://rubygems.org/
@@ -53,7 +54,7 @@ GEM
       unicode-emoji (~> 4.0, >= 4.0.4)
     unicode-emoji (4.0.4)
     yard (0.9.37)
-    zeitwerk (2.7.2)
+    zeitwerk (2.6.18)
 
 PLATFORMS
   x86_64-linux
