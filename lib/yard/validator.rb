@@ -1,13 +1,5 @@
 # frozen_string_literal: true
 
-module Yard; end
-module Yard::Configuration; end
-module Yard::Initializer; end
-module Yard::Wrapper; end
-module Yard::TypeModel; end
-module Yard::TypeModel::Builder; end
-module Yard::TypeModel::Parser; end
-
 require_relative 'type_model/definitions'
 require_relative 'type_model/parser'
 require_relative 'type_model/builder'
