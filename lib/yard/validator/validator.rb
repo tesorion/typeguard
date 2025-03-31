@@ -200,7 +200,7 @@ module Yard
         end
       end
 
-      def self.params_validator(types)
+      def self.param_validator(types)
         children = types.map { |node| Base.from(node) }
         if children.size == 1
           children.first
@@ -210,15 +210,13 @@ module Yard
       end
 
       def self.exhaustive_path(mod, method, sig)
-        params_validators = sig.parameters.map do |param|
-          params_validator(param.types)
-        end
-        return_validator = (params_validator(sig.returns.types) if sig.returns && !sig.returns.types.empty?)
+        param_validators = sig.parameters.map { |param| param_validator(param.types) }
+        return_validator = (param_validator(sig.returns.types) if sig.returns && !sig.returns.types.empty?)
         if return_validator
           mod.module_exec do
             define_method(sig.name) do |*args, &blk|
-              args.each_with_index do |arg, idx|
-                unless params_validators[idx].valid?(arg)
+              args.zip(param_validators).each do |arg, param_validator|
+                unless param_validator.valid?(arg)
                   raise TypeError,
                         "Expected #{sig.parameters[idx].type_strings} but received: #{arg.inspect}"
                 end
@@ -235,10 +233,10 @@ module Yard
         else
           mod.module_exec do
             define_method(sig.name) do |*args, &blk|
-              args.each_with_index do |arg, idx|
-                unless params_validators[idx].valid?(arg)
+              args.zip(param_validators).each do |arg, param_validator|
+                unless param_validator.valid?(arg)
                   raise TypeError,
-                        "Argument #{idx} failed validation: #{arg.inspect}"
+                        "Expected #{sig.parameters[idx].type_strings} but received: #{arg.inspect}"
                 end
               end
               method.bind_call(self, *args, &blk)
