@@ -5,18 +5,19 @@ module Yard
     # TODO: send logs
     @registry = {}
 
-    def self.get_counter(klass, method_name)
-      @registry[klass] ||= {}
-      @registry[klass][method_name] ||= Counter.new
-    end
-
     def self.flush
       @registry.each do |klass, method_counters|
         method_counters.each do |method_name, counter|
-          puts "Flushing #{klass}##{method_name}: #{counter.value} calls"
+          puts "#{klass}##{method_name}: #{counter.value} errors"
           counter.reset!
         end
       end
+    end
+
+    def self.report(klass, method_name)
+      @registry[klass] ||= {}
+      @registry[klass][method_name] ||= Counter.new
+      @registry[klass][method_name].increment
     end
 
     class Counter

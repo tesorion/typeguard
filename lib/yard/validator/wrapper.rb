@@ -88,6 +88,14 @@ module Yard
         else
           Validator.exhaustive_path(mod, method, sig)
         end
+        # TODO: move
+        current = mod.instance_method(sig.name)
+        mod.define_method(sig.name) do |*args, &blk|
+          current.bind_call(self, *args, &blk)
+        rescue TypeError => e
+          puts e if false
+          Yard::Metrics.report(mod, sig.name)
+        end
       end
     end
   end

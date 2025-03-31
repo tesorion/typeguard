@@ -15,6 +15,7 @@ module Yard
           when ModuleDefinition, ClassDefinition
             Object.const_get(definition.name.to_s, true)
             definition.members.each { |member| resolve_member(member) }
+            # TODO: resolve nested modules/classes and ensure validation gets added
           when MethodDefinition
             resolve_member(definition)
           end

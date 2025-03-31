@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# TODO: replace parser with YARD::Tags::TypesExplainer::Parser.parse
+
 module Yard
   module TypeModel
     module Parser
