@@ -2,7 +2,7 @@
 
 # rubocop:disable Naming/MethodParameterName
 
-# Run this example with yardoc bin/example.rb && ruby bin/example.rb
+# Run example with: ruby bin/example.rb
 
 # Custom constant
 class Foo; end
@@ -63,7 +63,7 @@ class Example
 end
 
 require_relative '../lib/yard/validator'
-Yard::Main.load_enable_yard('.yardoc')
+Yard::Main.load_enable_yard(['bin/example.rb'], false)
 at_exit { Yard::Metrics.flush }
 
 example = Example.new

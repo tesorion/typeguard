@@ -8,8 +8,20 @@ module Yard
         require 'yard'
         # ruby -e "require 'yard';YARD::Registry.load('.yardoc');YARD::Registry.all.each {|m|pp m;m.tags.each {|t|pp t};puts }"
 
-        def initialize(target)
-          YARD::Registry.load!(target)
+        # @see https://rubydoc.info/gems/yard/YARD/Registry
+        # @param reparse_files [Boolean] has no effect if target is a string.
+        #   If false and target is an array, the files are only reparsed if no .yardoc is present.
+        #   If true and target is an array, the files are always reparsed.
+        def initialize(target, reparse_files)
+          return unless YARD::Registry.load(target, reparse_files).root.children.empty?
+
+          if target.is_a?(String)
+            puts "WARNING: could not find YARD objects for target directory '#{target}'. " \
+            "Confirm that the directory exists and/or execute 'yardoc [...]' again."
+          else
+            puts "WARNING: could not find YARD objects for target files after reparsing array #{target}. " \
+            "Confirm that the files exist and/or execute 'yardoc #{target.join(' ')}' again in the correct directory."
+          end
         end
 
         def build
