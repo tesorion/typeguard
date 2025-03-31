@@ -93,7 +93,7 @@ module Yard
         mod.define_method(sig.name) do |*args, &blk|
           current.bind_call(self, *args, &blk)
         rescue TypeError => e
-          puts e if false
+          puts e
           Yard::Metrics.report(mod, sig.name)
         end
       end

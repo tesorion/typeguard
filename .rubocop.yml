@@ -20,9 +20,3 @@ Metrics/MethodLength:
 
 Metrics/ModuleLength:
   Enabled: false
-
-AllCops:
-  TargetRubyVersion: 3.0
-
-Naming/MethodParameterName:
-  MinNameLength: 0
