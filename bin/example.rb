@@ -53,6 +53,8 @@ pad = (1 << (example_methods.length - 1)).to_s.length
 args = ->(n) { Array.new([n, 0].max) { rand(1..(1 << 32)) } }
 
 example_methods.each_with_index do |method_name, i|
+  # The wrapping process has modified the arity/parameters
+  # of the unbound method, using a workaround to infer param count.
   param_count = method_name[-1].to_i
   n = 1 << i
   puts "#{n.to_s.rjust(pad)}x :#{method_name}"
