@@ -84,9 +84,7 @@ module Yard
 
         def build_types(tag)
           if tag.respond_to?(:types) && !tag.types.empty?
-            tag.types.map do |type|
-              Yard::TypeModel::Parser::YardParser.parse(type)
-            end
+            tag.types.map { |t| Yard::TypeModel::Parser::YardParser.parse_map(t) }
           else
             result = TypeNode.new(
               kind: :untyped,

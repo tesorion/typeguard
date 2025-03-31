@@ -1,12 +1,15 @@
 # frozen_string_literal: true
 
 require 'test_helper'
+require 'yard'
+require 'yard/type_model/yard_parser'
 
 module Yard
   module Test
     class YardParserTest < Minitest::Test
       include Yard::TypeModel::Definitions
       include Yard::TypeModel::Parser
+
       def assert_node_equal(expected, actual)
         assert_equal expected.kind, actual.kind
         assert_equal expected.shape, actual.shape
@@ -24,27 +27,27 @@ module Yard
       end
 
       def test_basic
-        result = YardParser.parse('Foo')
+        result = YardParser.parse_map('Foo')
         expected = TypeNode.new(kind: :Foo, shape: :basic, children: [], metadata: {})
         assert_node_equal expected, result
       end
 
       def test_true_literal
-        result = YardParser.parse('true')
+        result = YardParser.parse_map('true')
         expected = TypeNode.new(kind: :true, shape: :literal, children: [],
                                 metadata: {})
         assert_node_equal expected, result
       end
 
       def test_duck_type
-        result = YardParser.parse('#read')
+        result = YardParser.parse_map('#read')
         expected = TypeNode.new(kind: :"#read", shape: :duck, children: [],
                                 metadata: {})
         assert_node_equal expected, result
       end
 
       def test_generic_array_with_duck
-        result = YardParser.parse('Array<String, Symbol, #read>')
+        result = YardParser.parse_map('Array<String, Symbol, #read>')
         expected = TypeNode.new(
           kind: :Array,
           shape: :generic,
@@ -60,7 +63,7 @@ module Yard
       end
 
       def test_generic_set
-        result = YardParser.parse('Set<Number>')
+        result = YardParser.parse_map('Set<Number>')
         expected = TypeNode.new(
           kind: :Set,
           shape: :generic,
@@ -73,7 +76,7 @@ module Yard
       end
 
       def test_fixed_array
-        result = YardParser.parse('Array(String, Symbol)')
+        result = YardParser.parse_map('Array(String, Symbol)')
         expected = TypeNode.new(
           kind: :Array,
           shape: :fixed,
@@ -87,7 +90,7 @@ module Yard
       end
 
       def test_hash_explicit
-        result = YardParser.parse('Hash{String => Symbol, Number}')
+        result = YardParser.parse_map('Hash{String => Symbol, Number}')
         expected = TypeNode.new(
           kind: :Hash,
           shape: :hash,
@@ -104,7 +107,7 @@ module Yard
       end
 
       def test_hash_shorthand
-        result = YardParser.parse('{Foo, Bar => Symbol, Number}')
+        result = YardParser.parse_map('{Foo, Bar => Symbol, Number}')
         expected = TypeNode.new(
           kind: :Hash,
           shape: :hash,
@@ -124,7 +127,7 @@ module Yard
       end
 
       def test_generic_array_shorthand
-        result = YardParser.parse('<String, Symbol>')
+        result = YardParser.parse_map('<String, Symbol>')
         expected = TypeNode.new(
           kind: :Array,
           shape: :generic,
@@ -138,7 +141,7 @@ module Yard
       end
 
       def test_fixed_array_with_boolean
-        result = YardParser.parse('(String, Boolean)')
+        result = YardParser.parse_map('(String, Boolean)')
         expected_boolean = TypeNode.new(
           kind: :boolean,
           shape: :union,
@@ -161,7 +164,7 @@ module Yard
       end
 
       def test_generic_array_nested
-        result = YardParser.parse('Array<String, Array<Integer, Array<Hash>>>')
+        result = YardParser.parse_map('Array<String, Array<Integer, Array<Hash>>>')
         expected = TypeNode.new(
           kind: :Array,
           shape: :generic,
