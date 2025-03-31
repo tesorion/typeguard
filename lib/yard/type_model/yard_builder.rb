@@ -88,12 +88,13 @@ module Yard
               Yard::TypeModel::Parser::YardParser.parse(type)
             end
           else
-            [] << TypeNode.new(
+            result = TypeNode.new(
               kind: :untyped,
               shape: :untyped,
               children: [],
               metadata: { note: 'Types specifier list is empty: untyped' }
             )
+            [result]
           end
         end
       end
