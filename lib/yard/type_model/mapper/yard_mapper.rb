@@ -2,9 +2,9 @@
 
 module Yard
   module TypeModel
-    module Parser
+    module Mapper
       # Maps YARD types to the type model
-      class YardParser
+      class YardMapper
         include Yard::TypeModel::Definitions
 
         SPECIAL_LITERALS = %w[true false nil self void].freeze

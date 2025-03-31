@@ -45,7 +45,7 @@ module Yard
         when :union
           node.children.each { |child_node| resolve_type(child_node) }
         when :literal
-          # The parser has already rejected invalid literals,
+          # The mapper has already rejected invalid literals,
         when :duck
           # Resolving duck-types at this point is unreliable
           # and slow, leaving it up to runtime checks
