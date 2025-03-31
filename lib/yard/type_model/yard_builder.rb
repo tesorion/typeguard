@@ -31,28 +31,28 @@ module Yard
         end
 
         def build_object(object)
-          case object
-          when YARD::CodeObjects::NamespaceObject
+          case object.type
+          when :class
             members = object.children.map { |child| build_object(child) }.compact
 
             # TODO: type parameters? #initialize captured by :methods
-            if object.is_a?(YARD::CodeObjects::ClassObject)
-              ClassDefinition.new(
-                name: object.path,
-                source: "#{object.file}:#{object.line}",
-                parent: object.superclass&.path,
-                type_parameters: nil,
-                members: members
-              )
-            else
-              ModuleDefinition.new(
-                name: object.path,
-                source: "#{object.file}:#{object.line}",
-                type_parameters: nil,
-                members: members
-              )
-            end
-          when YARD::CodeObjects::MethodObject
+            ClassDefinition.new(
+              name: object.path,
+              source: "#{object.file}:#{object.line}",
+              parent: object.superclass&.path,
+              type_parameters: nil,
+              members: members
+            )
+          when :module
+            members = object.children.map { |child| build_object(child) }.compact
+
+            ModuleDefinition.new(
+              name: object.path,
+              source: "#{object.file}:#{object.line}",
+              type_parameters: nil,
+              members: members
+            )
+          when :method
             parameters = object.tags(:param).map do |tag|
               ParameterDefinition.new(
                 name: tag.name.to_sym,
@@ -75,7 +75,7 @@ module Yard
               parameters: parameters,
               returns: returns
             )
-          when YARD::CodeObjects::ConstantObject, YARD::CodeObjects::ClassVariableObject
+          when :constant, :classvariable
             raise "Not implemented: #{object.class}"
           else
             raise "Unsupported YARD object: #{object.class}"
