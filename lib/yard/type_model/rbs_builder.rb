@@ -5,6 +5,7 @@ require 'rbs'
 module Yard
   module TypeModel
     module Builder
+      # Takes RBS signatures and returns a generic type model
       class RBSBuilder
         #  ruby -e "require 'rbs';loader=RBS::EnvironmentLoader.new(core_root: nil);loader.add(path:Pathname('sig'));environment=RBS::Environment.from_loader(loader);environment.declarations.each{|cls,entries|pp cls;pp entries}"
         # https://github.com/ruby/rbs/blob/master/docs/architecture.md

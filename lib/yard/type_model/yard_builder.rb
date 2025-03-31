@@ -5,6 +5,7 @@ require 'yard'
 module Yard
   module TypeModel
     module Builder
+      # Takes YARD documentation and returns a generic type model
       class YardBuilder
         include Yard::TypeModel::Definitions
         # ruby -e "require 'yard';YARD::Registry.load('.yardoc');YARD::Registry.all.each {|m|pp m;m.tags.each {|t|pp t};puts }"
