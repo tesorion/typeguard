@@ -2,7 +2,7 @@
 
 require 'test_helper'
 require 'yard'
-require 'yard/type_model/yard_parser'
+require 'yard/type_model/parser/yard_parser'
 
 module Yard
   module Test
