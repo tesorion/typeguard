@@ -30,8 +30,8 @@ module Yard
   end
 
   setting :wrapping, reader: true do
-    Yard.setting_bool self, :raise_on_incorrect_arity
-    Yard.setting_bool self, :raise_on_incorrect_visibility
+    Yard.setting_bool self, :raise_on_unexpected_arity
+    Yard.setting_bool self, :raise_on_unexpected_visibility
   end
 
   # TODO: implement flags below
@@ -50,7 +50,7 @@ module Yard
     builder = TypeModel::Builder::IMPLEMENTATION.new(config.target, config.reparse)
     definitions = builder.build
     Yard::Resolution::Resolver.new(definitions, config.resolution).resolve!
-    Yard::Validation::Wrapper.new(definitions).wrap!
+    Yard::Validation::Wrapper.new(definitions, config.wrapping).wrap!
 
     at_exit { Yard::Metrics.flush } if config.at_exit_report
   end

@@ -17,6 +17,7 @@ module Yard
       source = definition.source
       full_message = "#{error.upcase} #{type} (#{module_name}##{definition.name} in #{source}): #{message}"
       @logs << Log.new(module_name, definition.name, type, error, full_message, source)
+      full_message
       # caller_location
     end
   end

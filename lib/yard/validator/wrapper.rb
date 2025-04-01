@@ -5,8 +5,9 @@ module Yard
     class Wrapper
       include Yard::TypeModel::Definitions
 
-      def initialize(definitions)
+      def initialize(definitions, config)
         @definitions = definitions
+        @config = config
       end
 
       def wrap!
@@ -37,44 +38,8 @@ module Yard
         # use sym name instead of string?
         method_name = sig.name
         original_method = target.instance_method(method_name)
-        expected_arity = sig.parameters.size
-        actual_arity = original_method.parameters.count
-        unless expected_arity == actual_arity
-          # TODO: check/raise if configured
-          raise "Expected arity of '#{expected_arity}' but received '#{actual_arity}'.\n" \
-                "Module: #{mod}\n" \
-                "Sig: #{sig.name}\n"
-        end
-        expected_visibility = sig.visibility
-        actual_visibility =
-          if target.public_instance_methods(false).include?(method_name)
-            :public
-          elsif target.protected_instance_methods(false).include?(method_name)
-            :protected
-          elsif target.private_instance_methods(false).include?(method_name)
-            :private
-          else
-            :public
-          end
-        unless expected_visibility == actual_visibility
-          if expected_visibility == :public && actual_visibility == :private
-            if sig.name == :initialize
-              # Initialize is private by default, ignore
-            elsif mod == Object
-              # Methods on Object (root) are private by default, ignore
-            else
-              # TODO: check/raise if configured
-              raise "Expected visibility of public but received private.\n" \
-              "Module: #{mod}\n" \
-              "Sig: #{sig.name}\n"
-            end
-          else
-            # TODO: check/raise if configured
-            raise "Expected visibility of '#{expected_visibility}' but received '#{actual_visibility}'.\n" \
-            "Module: #{mod}\n" \
-            "Sig: #{sig.name}\n"
-          end
-        end
+        check_arity(mod, sig, original_method)
+        actual_visibility = check_visibility(target, mod, sig, method_name)
         define_wrapper(mod, original_method, sig)
         target.send(actual_visibility, method_name)
       end
@@ -102,6 +67,52 @@ module Yard
         rescue TypeError => _e
           # Yard::Metrics.report(mod, sig.name, :err, e)
         end
+      end
+
+      def check_arity(mod, sig, original_method)
+        expected_arity = sig.parameters.size
+        actual_arity = original_method.parameters.count
+        return if expected_arity == actual_arity
+
+        error = "Expected arity of '#{expected_arity}' but received '#{actual_arity}'."
+        full_message = Metrics.report(mod, sig, :unexpected_arity, error)
+        raise full_message if @config.raise_on_unexpected_arity
+      end
+
+      def check_visibility(target, mod, sig, method_name)
+        expected_visibility = sig.visibility
+        actual_visibility =
+          if target.public_instance_methods(false).include?(method_name)
+            :public
+          elsif target.protected_instance_methods(false).include?(method_name)
+            :protected
+          elsif target.private_instance_methods(false).include?(method_name)
+            :private
+          else
+            :public
+          end
+
+        error = nil
+        unless expected_visibility == actual_visibility
+          if expected_visibility == :public && actual_visibility == :private
+            if sig.name == :initialize
+              # Initialize is private by default, ignore
+            elsif mod == Object
+              # Methods on Object (root) are private by default, ignore
+            else
+              error = 'Expected visibility of public but received private.'
+            end
+          else
+            error = "Expected visibility of '#{expected_visibility}' but received '#{actual_visibility}'."
+          end
+        end
+
+        if error
+          full_message = Metrics.report(mod, sig, :unexpected_visibility, error)
+          raise full_message if @config.raise_on_unexpected_visibility
+        end
+
+        actual_visibility
       end
     end
   end

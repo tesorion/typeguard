@@ -5,13 +5,13 @@ module Yard
     class Resolver
       include Yard::TypeModel::Definitions
 
-      def initialize(definitions, settings)
+      def initialize(definitions, config)
         @definitions = definitions
-        @settings = settings
+        @config = config
       end
 
       def resolve!
-        if @settings.raise_on_name_error
+        if @config.raise_on_name_error
           @definitions.each { |definition| resolve_definition(definition) }
         else
           # Create compact array of resolved definitions

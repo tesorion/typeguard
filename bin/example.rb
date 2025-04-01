@@ -99,6 +99,8 @@ Yard.configure do |config|
   config.reparse = true
   config.at_exit_report = true
   config.resolution.raise_on_name_error = false
+  config.wrapping.raise_on_unexpected_arity = false
+  config.wrapping.raise_on_unexpected_visibility = false
 
   config.raise_on_failure = false
   config.report_on_failure = false
