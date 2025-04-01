@@ -34,8 +34,6 @@ module Yard
       raise TypeError, msg if Yard.config.validation.raise_on_unexpected_return
     end
 
-    # raise TypeError, "Argument 0 type mismatch: expected #{param0}, got #{arg0.class}" unless arg0.is_a?(param0)
-
     def self.report_unexpected_argument(sig, expected, actual, mod_name, param_index)
       caller = caller_locations(2, 1).first
       caller_string = "#{caller.path}:#{caller.lineno}"

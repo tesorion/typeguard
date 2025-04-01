@@ -60,13 +60,6 @@ module Yard
         else
           Validator.exhaustive_path(mod, method, sig)
         end
-        # TODO: move
-        # current = mod.instance_method(sig.name)
-        # mod.define_method(sig.name) do |*args, &blk|
-        #   current.bind_call(self, *args, &blk)
-        # rescue TypeError => _e
-        #   # Yard::Metrics.report(mod, sig.name, :err, e)
-        # end
       end
 
       def check_arity(mod, sig, original_method)

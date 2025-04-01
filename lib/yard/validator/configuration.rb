@@ -40,8 +40,6 @@ module Yard
   end
 
   # TODO: implement flags below
-  setting :raise_on_failure, default: true
-  setting :report_on_failure, default: true
   setting :document_untyped, default: true
   setting :report_untyped, default: true
 

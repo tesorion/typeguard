@@ -210,6 +210,7 @@ module Yard
       end
 
       def self.exhaustive_path(mod, method, sig)
+        # TODO: metrics report
         param_validators = sig.parameters.map { |param| param_validator(param.types) }
         return_validator = (param_validator(sig.returns.types) if sig.returns && !sig.returns.types.empty?)
         if return_validator

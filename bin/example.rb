@@ -104,8 +104,6 @@ Yard.configure do |config|
   config.validation.raise_on_unexpected_argument = false
   config.validation.raise_on_unexpected_return = false
 
-  config.raise_on_failure = false
-  config.report_on_failure = false
   config.document_untyped = false
   config.report_untyped = false
 end.process!
