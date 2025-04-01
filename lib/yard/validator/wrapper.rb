@@ -17,9 +17,14 @@ module Yard
         case definition
         when ModuleDefinition, ClassDefinition
           mod = Object.const_get(definition.name)
-          definition.members.grep(MethodDefinition) { |sig| wrap_method(mod, sig) }
-          # Wrap nested modules
-          definition.members.grep_v(MethodDefinition) { |child| wrap_definition(child) }
+          definition.members.each do |member|
+            if member.is_a?(MethodDefinition)
+              wrap_method(mod, member)
+            else
+              # Wrap nested modules
+              wrap_definition(member)
+            end
+          end
         when MethodDefinition
           # Method defined in root, as a private instance method of Object
           wrap_method(Object, definition)
