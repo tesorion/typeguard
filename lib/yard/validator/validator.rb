@@ -215,10 +215,13 @@ module Yard
         if return_validator
           mod.module_exec do
             define_method(sig.name) do |*args, &blk|
+              # TODO: cleaner error messages
+              i = 0
               args.zip(param_validators).each do |arg, param_validator|
+                i += 1
                 unless param_validator.valid?(arg)
                   raise TypeError,
-                        "Expected #{sig.parameters[idx].type_strings} but received: #{arg.inspect}"
+                        "Expected #{sig.parameters[i].type_strings} but received: #{arg.inspect}"
                 end
               end
               result = method.bind_call(self, *args, &blk)
@@ -233,10 +236,13 @@ module Yard
         else
           mod.module_exec do
             define_method(sig.name) do |*args, &blk|
+              # TODO: cleaner error messages
+              i = 0
               args.zip(param_validators).each do |arg, param_validator|
+                i += 1
                 unless param_validator.valid?(arg)
                   raise TypeError,
-                        "Expected #{sig.parameters[idx].type_strings} but received: #{arg.inspect}"
+                        "Expected #{sig.parameters[i].type_strings} but received: #{arg.inspect}"
                 end
               end
               method.bind_call(self, *args, &blk)

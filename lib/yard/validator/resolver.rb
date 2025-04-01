@@ -17,7 +17,7 @@ module Yard
         case definition
         when ModuleDefinition, ClassDefinition
           Object.const_get(definition.name.to_s, true)
-          definition.members.each { |member| resolve_definition(member) }
+          definition.children.each { |child| resolve_definition(child) }
         when MethodDefinition
           definition.parameters.each { |param| param.types.each { |node| resolve_type(node) } }
           definition.returns.types.each { |node| resolve_type(node) }

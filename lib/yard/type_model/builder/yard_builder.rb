@@ -33,7 +33,7 @@ module Yard
         def build_object(object)
           case object.type
           when :class
-            members = object.children.map { |child| build_object(child) }.compact
+            children = object.children.map { |child| build_object(child) }.compact
 
             # TODO: type parameters? #initialize captured by :methods
             ClassDefinition.new(
@@ -41,16 +41,16 @@ module Yard
               source: "#{object.file}:#{object.line}",
               parent: object.superclass&.path,
               type_parameters: nil,
-              members: members
+              children: children
             )
           when :module
-            members = object.children.map { |child| build_object(child) }.compact
+            children = object.children.map { |child| build_object(child) }.compact
 
             ModuleDefinition.new(
               name: object.path,
               source: "#{object.file}:#{object.line}",
               type_parameters: nil,
-              members: members
+              children: children
             )
           when :method
             parameters = object.tags(:param).map do |tag|

@@ -21,7 +21,7 @@ module One
         # @param two [One::Two::TwoClass]
         # @return [(One::OneClass, One::Two::TwoClass, One::Two::Three::ThreeClass)]
         def nested_fn(one, two)
-          [one, two, ThreeClass.new]
+          [two, one, ThreeClass.new]
         end
       end
     end

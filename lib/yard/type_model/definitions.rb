@@ -4,64 +4,11 @@ module Yard
   module TypeModel
     module Definitions
       TypeNode = Struct.new(:kind, :shape, :children, :metadata, keyword_init: true)
-
-      # NOTE: :source is .rb for YARD and .rbs for RBS
-      class ModuleDefinition
-        attr_reader :name, :source, :type_parameters, :members
-
-        def initialize(name:, source:, type_parameters:, members:)
-          @name = name
-          @source = source
-          @type_parameters = type_parameters
-          @members = members
-        end
-      end
-
-      class ClassDefinition
-        attr_reader :name, :source, :parent, :type_parameters, :members
-
-        def initialize(name:, source:, parent:, type_parameters:, members:)
-          @name = name
-          @source = source
-          @parent = parent
-          @type_parameters = type_parameters
-          @members = members
-        end
-      end
-
-      class MethodDefinition
-        attr_reader :name, :source, :scope, :visibility, :parameters, :returns
-
-        def initialize(name:, source:, scope:, visibility:, parameters:, returns:)
-          @name = name
-          @source = source # a.rb 10:5
-          @scope = scope # instance/class method
-          @visibility = visibility
-          @parameters = parameters
-          @returns = returns
-        end
-      end
-
-      class ParameterDefinition
-        attr_reader :name, :source, :types, :type_strings
-
-        def initialize(name:, source:, types:, type_strings:)
-          @name = name
-          @source = source
-          @types = types
-          @type_strings = type_strings
-        end
-      end
-
-      class ReturnDefinition
-        attr_reader :source, :types, :type_strings
-
-        def initialize(source:, types:, type_strings:)
-          @source = source
-          @types = types
-          @type_strings = type_strings
-        end
-      end
+      ModuleDefinition = Struct.new(:name, :source, :type_parameters, :children)
+      ClassDefinition = Struct.new(:name, :source, :parent, :type_parameters, :children)
+      MethodDefinition = Struct.new(:name, :source, :scope, :visibility, :parameters, :returns)
+      ParameterDefinition = Struct.new(:name, :source, :types, :type_strings)
+      ReturnDefinition = Struct.new(:source, :types, :type_strings)
     end
   end
 end

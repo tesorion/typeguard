@@ -17,12 +17,12 @@ module Yard
         case definition
         when ModuleDefinition, ClassDefinition
           mod = Object.const_get(definition.name)
-          definition.members.each do |member|
-            if member.is_a?(MethodDefinition)
-              wrap_method(mod, member)
+          definition.children.each do |child|
+            if child.is_a?(MethodDefinition)
+              wrap_method(mod, child)
             else
               # Wrap nested modules
-              wrap_definition(member)
+              wrap_definition(child)
             end
           end
         when MethodDefinition
