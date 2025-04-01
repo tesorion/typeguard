@@ -5,12 +5,18 @@ module Yard
     class Resolver
       include Yard::TypeModel::Definitions
 
-      def initialize(definitions)
+      def initialize(definitions, settings)
         @definitions = definitions
+        @settings = settings
       end
 
       def resolve!
-        @definitions.each { |definition| resolve_definition(definition) }
+        if @settings.raise_on_name_error
+          @definitions.each { |definition| resolve_definition(definition) }
+        else
+          # Create compact array of resolved definitions
+          resolve_prune_definitions!
+        end
       end
 
       def resolve_definition(definition)
@@ -22,6 +28,25 @@ module Yard
           definition.parameters.each { |param| param.types.each { |node| resolve_type(node) } }
           definition.returns.types.each { |node| resolve_type(node) }
         else raise "Unexpected definition for '#{definition}'"
+        end
+      end
+
+      def resolve_prune_definitions!(definitions = @definitions, parent = Object)
+        definitions.grep_v(MethodDefinition) do |definition|
+          definition.children = resolve_prune_definitions!(definition.children, definition)
+        end
+        definitions.reject do |definition|
+          case definition
+          when ModuleDefinition, ClassDefinition
+            Object.const_get(definition.name.to_s, true)
+          when MethodDefinition
+            definition.parameters.each { |param| param.types.each { |node| resolve_type(node) } }
+            definition.returns.types.each { |node| resolve_type(node) }
+          end
+          false
+        rescue NameError => e
+          Metrics.report(parent, definition, :unresolved, e)
+          true
         end
       end
 

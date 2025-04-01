@@ -2,38 +2,22 @@
 
 module Yard
   module Metrics
-    # TODO: send logs
-    @registry = {}
+    Log = Struct.new(:module, :definition, :type, :error, :message, :source)
+
+    @logs = []
 
     def self.flush
-      @registry.each do |klass, method_counters|
-        method_counters.each do |method_name, counter|
-          puts "#{klass}##{method_name}: #{counter.value} errors"
-          counter.reset!
-        end
-      end
+      puts "\nyard-validation errors: #{@logs.length} #{"\n" unless @logs.empty?}"
+      @logs.each { |log| puts log.message }
     end
 
-    def self.report(klass, method_name)
-      @registry[klass] ||= {}
-      @registry[klass][method_name] ||= Counter.new
-      @registry[klass][method_name].increment
-    end
-
-    class Counter
-      attr_reader :value
-
-      def initialize
-        @value = 0
-      end
-
-      def increment
-        @value += 1
-      end
-
-      def reset!
-        @value = 0
-      end
+    def self.report(mod, definition, error, message)
+      module_name = mod.name.to_sym
+      type = definition.class.name.split('::').last.to_sym
+      source = definition.source
+      full_message = "#{error.upcase} #{type} (#{module_name}##{definition.name} in #{source}): #{message}"
+      @logs << Log.new(module_name, definition.name, type, error, full_message, source)
+      # caller_location
     end
   end
 end

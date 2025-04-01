@@ -7,26 +7,32 @@ module Yard
 
   SUPPORTED_SOURCES = %i[yard rbs].freeze
 
-  setting :enabled, default: false
+  def self.setting_bool(target = self, name, default: false)
+    target.setting name, default: default, reader: true, constructor: proc { |value|
+      raise "Config '#{name}' must be true or false" unless value.is_a?(TrueClass) || value.is_a?(FalseClass)
 
+      value
+    }
+  end
+
+  setting_bool :enabled
+  setting_bool :reparse
+  setting_bool :at_exit_report
+  setting :target, reader: true
   setting :source, default: :yard, reader: true, constructor: proc { |value|
     raise "Config source must be one of #{SUPPORTED_SOURCES}" unless SUPPORTED_SOURCES.include?(value)
 
     value
   }
-  setting :target, reader: true
 
-  setting :reparse, default: false, reader: true, constructor: proc { |value|
-    raise 'Config reparse must be true or false' unless value.is_a?(TrueClass) || value.is_a?(FalseClass)
+  setting :resolution, reader: true do
+    Yard.setting_bool self, :raise_on_name_error
+  end
 
-    value
-  }
-
-  setting :at_exit_report, default: false, constructor: proc { |value|
-    raise 'Config at_exit_report must be true or false' unless value.is_a?(TrueClass) || value.is_a?(FalseClass)
-
-    value
-  }
+  setting :wrapping, reader: true do
+    Yard.setting_bool self, :raise_on_incorrect_arity
+    Yard.setting_bool self, :raise_on_incorrect_visibility
+  end
 
   # TODO: implement flags below
   setting :raise_on_failure, default: true
@@ -43,7 +49,7 @@ module Yard
     Yard::TypeModel::Builder.send(config.source)
     builder = TypeModel::Builder::IMPLEMENTATION.new(config.target, config.reparse)
     definitions = builder.build
-    Yard::Resolution::Resolver.new(definitions).resolve!
+    Yard::Resolution::Resolver.new(definitions, config.resolution).resolve!
     Yard::Validation::Wrapper.new(definitions).wrap!
 
     at_exit { Yard::Metrics.flush } if config.at_exit_report

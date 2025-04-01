@@ -98,6 +98,7 @@ Yard.configure do |config|
   config.target = ['bin/example.rb']
   config.reparse = true
   config.at_exit_report = true
+  config.resolution.raise_on_name_error = false
 
   config.raise_on_failure = false
   config.report_on_failure = false
