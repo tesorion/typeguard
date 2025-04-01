@@ -23,7 +23,7 @@ module Yard
           define_method(sig.name) do |&blk|
             result = method.bind_call(self, &blk)
             unless result.is_a?(return_object)
-              raise TypeError, "Return type mismatch: expected #{return_object}, got #{result.class}"
+              Metrics.report_unexpected_return(sig, return_object, result, mod.name)
             end
 
             result
@@ -34,11 +34,11 @@ module Yard
       def self.validate_standard1(mod, method, sig, return_object, param0)
         mod.module_exec do
           define_method(sig.name) do |arg0, &blk|
-            raise TypeError, "Argument 0 type mismatch: expected #{param0}, got #{arg0.class}" unless arg0.is_a?(param0)
+            Metrics.report_unexpected_argument(sig, param0, arg0, mod.name, 0) unless arg0.is_a?(param0)
 
             result = method.bind_call(self, arg0, &blk)
             unless result.is_a?(return_object)
-              raise TypeError, "Return type mismatch: expected #{return_object}, got #{result.class}"
+              Metrics.report_unexpected_return(sig, return_object, result, mod.name)
             end
 
             result
@@ -49,12 +49,12 @@ module Yard
       def self.validate_standard2(mod, method, sig, return_object, param0, param1)
         mod.module_exec do
           define_method(sig.name) do |arg0, arg1, &blk|
-            raise TypeError, "Argument 0 type mismatch: expected #{param0}, got #{arg0.class}" unless arg0.is_a?(param0)
-            raise TypeError, "Argument 1 type mismatch: expected #{param1}, got #{arg1.class}" unless arg1.is_a?(param1)
+            Metrics.report_unexpected_argument(sig, param0, arg0, mod.name, 0) unless arg0.is_a?(param0)
+            Metrics.report_unexpected_argument(sig, param1, arg1, mod.name, 1) unless arg1.is_a?(param1)
 
             result = method.bind_call(self, arg0, arg1, &blk)
             unless result.is_a?(return_object)
-              raise TypeError, "Return type mismatch: expected #{return_object}, got #{result.class}"
+              Metrics.report_unexpected_return(sig, return_object, result, mod.name)
             end
 
             result
@@ -65,13 +65,13 @@ module Yard
       def self.validate_standard3(mod, method, sig, return_object, param0, param1, param2)
         mod.module_exec do
           define_method(sig.name) do |arg0, arg1, arg2, &blk|
-            raise TypeError, "Argument 0 type mismatch: expected #{param0}, got #{arg0.class}" unless arg0.is_a?(param0)
-            raise TypeError, "Argument 1 type mismatch: expected #{param1}, got #{arg1.class}" unless arg1.is_a?(param1)
-            raise TypeError, "Argument 2 type mismatch: expected #{param2}, got #{arg2.class}" unless arg2.is_a?(param2)
+            Metrics.report_unexpected_argument(sig, param0, arg0, mod.name, 0) unless arg0.is_a?(param0)
+            Metrics.report_unexpected_argument(sig, param1, arg1, mod.name, 1) unless arg1.is_a?(param1)
+            Metrics.report_unexpected_argument(sig, param2, arg2, mod.name, 2) unless arg2.is_a?(param2)
 
             result = method.bind_call(self, arg0, arg1, arg2, &blk)
             unless result.is_a?(return_object)
-              raise TypeError, "Return type mismatch: expected #{return_object}, got #{result.class}"
+              Metrics.report_unexpected_return(sig, return_object, result, mod.name)
             end
 
             result
@@ -82,14 +82,14 @@ module Yard
       def self.validate_standard4(mod, method, sig, return_object, param0, param1, param2, param3)
         mod.module_exec do
           define_method(sig.name) do |arg0, arg1, arg2, arg3, &blk|
-            raise TypeError, "Argument 0 type mismatch: expected #{param0}, got #{arg0.class}" unless arg0.is_a?(param0)
-            raise TypeError, "Argument 1 type mismatch: expected #{param1}, got #{arg1.class}" unless arg1.is_a?(param1)
-            raise TypeError, "Argument 2 type mismatch: expected #{param2}, got #{arg2.class}" unless arg2.is_a?(param2)
-            raise TypeError, "Argument 3 type mismatch: expected #{param3}, got #{arg3.class}" unless arg3.is_a?(param2)
+            Metrics.report_unexpected_argument(sig, param0, arg0, mod.name, 0) unless arg0.is_a?(param0)
+            Metrics.report_unexpected_argument(sig, param1, arg1, mod.name, 1) unless arg1.is_a?(param1)
+            Metrics.report_unexpected_argument(sig, param2, arg2, mod.name, 2) unless arg2.is_a?(param2)
+            Metrics.report_unexpected_argument(sig, param3, arg3, mod.name, 3) unless arg3.is_a?(param3)
 
             result = method.bind_call(self, arg0, arg1, arg2, arg3, &blk)
             unless result.is_a?(return_object)
-              raise TypeError, "Return type mismatch: expected #{return_object}, got #{result.class}"
+              Metrics.report_unexpected_return(sig, return_object, result, mod.name)
             end
 
             result
@@ -100,15 +100,15 @@ module Yard
       def self.validate_standard5(mod, method, sig, return_object, param0, param1, param2, param3, param4)
         mod.module_exec do
           define_method(sig.name) do |arg0, arg1, arg2, arg3, arg4, &blk|
-            raise TypeError, "Argument 0 type mismatch: expected #{param0}, got #{arg0.class}" unless arg0.is_a?(param0)
-            raise TypeError, "Argument 1 type mismatch: expected #{param1}, got #{arg1.class}" unless arg1.is_a?(param1)
-            raise TypeError, "Argument 2 type mismatch: expected #{param2}, got #{arg2.class}" unless arg2.is_a?(param2)
-            raise TypeError, "Argument 3 type mismatch: expected #{param3}, got #{arg3.class}" unless arg3.is_a?(param2)
-            raise TypeError, "Argument 4 type mismatch: expected #{param4}, got #{arg4.class}" unless arg4.is_a?(param2)
+            Metrics.report_unexpected_argument(sig, param0, arg0, mod.name, 0) unless arg0.is_a?(param0)
+            Metrics.report_unexpected_argument(sig, param1, arg1, mod.name, 1) unless arg1.is_a?(param1)
+            Metrics.report_unexpected_argument(sig, param2, arg2, mod.name, 2) unless arg2.is_a?(param2)
+            Metrics.report_unexpected_argument(sig, param3, arg3, mod.name, 3) unless arg3.is_a?(param3)
+            Metrics.report_unexpected_argument(sig, param4, arg4, mod.name, 4) unless arg4.is_a?(param4)
 
             result = method.bind_call(self, arg0, arg1, arg2, arg3, arg4, &blk)
             unless result.is_a?(return_object)
-              raise TypeError, "Return type mismatch: expected #{return_object}, got #{result.class}"
+              Metrics.report_unexpected_return(sig, return_object, result, mod.name)
             end
 
             result
@@ -143,7 +143,7 @@ module Yard
       def self.validate_fastest1(mod, method, sig, param0)
         mod.module_exec do
           define_method(sig.name) do |arg0, &blk|
-            raise TypeError, "Argument 0 type mismatch: expected #{param0}, got #{arg0.class}" unless arg0.is_a?(param0)
+            Metrics.report_unexpected_argument(sig, param0, arg0, mod.name, 0) unless arg0.is_a?(param0)
 
             method.bind_call(self, arg0, &blk)
           end
@@ -153,8 +153,8 @@ module Yard
       def self.validate_fastest2(mod, method, sig, param0, param1)
         mod.module_exec do
           define_method(sig.name) do |arg0, arg1, &blk|
-            raise TypeError, "Argument 0 type mismatch: expected #{param0}, got #{arg0.class}" unless arg0.is_a?(param0)
-            raise TypeError, "Argument 1 type mismatch: expected #{param1}, got #{arg1.class}" unless arg1.is_a?(param1)
+            Metrics.report_unexpected_argument(sig, param0, arg0, mod.name, 0) unless arg0.is_a?(param0)
+            Metrics.report_unexpected_argument(sig, param1, arg1, mod.name, 1) unless arg1.is_a?(param1)
 
             method.bind_call(self, arg0, arg1, &blk)
           end
@@ -164,9 +164,9 @@ module Yard
       def self.validate_fastest3(mod, method, sig, param0, param1, param2)
         mod.module_exec do
           define_method(sig.name) do |arg0, arg1, arg2, &blk|
-            raise TypeError, "Argument 0 type mismatch: expected #{param0}, got #{arg0.class}" unless arg0.is_a?(param0)
-            raise TypeError, "Argument 1 type mismatch: expected #{param1}, got #{arg1.class}" unless arg1.is_a?(param1)
-            raise TypeError, "Argument 2 type mismatch: expected #{param2}, got #{arg2.class}" unless arg2.is_a?(param2)
+            Metrics.report_unexpected_argument(sig, param0, arg0, mod.name, 0) unless arg0.is_a?(param0)
+            Metrics.report_unexpected_argument(sig, param1, arg1, mod.name, 1) unless arg1.is_a?(param1)
+            Metrics.report_unexpected_argument(sig, param2, arg2, mod.name, 2) unless arg2.is_a?(param2)
 
             method.bind_call(self, arg0, arg1, arg2, &blk)
           end
@@ -176,10 +176,10 @@ module Yard
       def self.validate_fastest4(mod, method, sig, param0, param1, param2, param3)
         mod.module_exec do
           define_method(sig.name) do |arg0, arg1, arg2, arg3, &blk|
-            raise TypeError, "Argument 0 type mismatch: expected #{param0}, got #{arg0.class}" unless arg0.is_a?(param0)
-            raise TypeError, "Argument 1 type mismatch: expected #{param1}, got #{arg1.class}" unless arg1.is_a?(param1)
-            raise TypeError, "Argument 2 type mismatch: expected #{param2}, got #{arg2.class}" unless arg2.is_a?(param2)
-            raise TypeError, "Argument 3 type mismatch: expected #{param3}, got #{arg3.class}" unless arg3.is_a?(param2)
+            Metrics.report_unexpected_argument(sig, param0, arg0, mod.name, 0) unless arg0.is_a?(param0)
+            Metrics.report_unexpected_argument(sig, param1, arg1, mod.name, 1) unless arg1.is_a?(param1)
+            Metrics.report_unexpected_argument(sig, param2, arg2, mod.name, 2) unless arg2.is_a?(param2)
+            Metrics.report_unexpected_argument(sig, param3, arg3, mod.name, 3) unless arg3.is_a?(param3)
 
             method.bind_call(self, arg0, arg1, arg2, arg3, &blk)
           end
@@ -189,11 +189,11 @@ module Yard
       def self.validate_fastest5(mod, method, sig, param0, param1, param2, param3, param4)
         mod.module_exec do
           define_method(sig.name) do |arg0, arg1, arg2, arg3, arg4, &blk|
-            raise TypeError, "Argument 0 type mismatch: expected #{param0}, got #{arg0.class}" unless arg0.is_a?(param0)
-            raise TypeError, "Argument 1 type mismatch: expected #{param1}, got #{arg1.class}" unless arg1.is_a?(param1)
-            raise TypeError, "Argument 2 type mismatch: expected #{param2}, got #{arg2.class}" unless arg2.is_a?(param2)
-            raise TypeError, "Argument 3 type mismatch: expected #{param3}, got #{arg3.class}" unless arg3.is_a?(param2)
-            raise TypeError, "Argument 4 type mismatch: expected #{param4}, got #{arg4.class}" unless arg4.is_a?(param2)
+            Metrics.report_unexpected_argument(sig, param0, arg0, mod.name, 0) unless arg0.is_a?(param0)
+            Metrics.report_unexpected_argument(sig, param1, arg1, mod.name, 1) unless arg1.is_a?(param1)
+            Metrics.report_unexpected_argument(sig, param2, arg2, mod.name, 2) unless arg2.is_a?(param2)
+            Metrics.report_unexpected_argument(sig, param3, arg3, mod.name, 3) unless arg3.is_a?(param3)
+            Metrics.report_unexpected_argument(sig, param4, arg4, mod.name, 4) unless arg4.is_a?(param4)
 
             method.bind_call(self, arg0, arg1, arg2, arg3, arg4, &blk)
           end

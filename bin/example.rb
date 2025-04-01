@@ -101,6 +101,8 @@ Yard.configure do |config|
   config.resolution.raise_on_name_error = false
   config.wrapping.raise_on_unexpected_arity = false
   config.wrapping.raise_on_unexpected_visibility = false
+  config.validation.raise_on_unexpected_argument = false
+  config.validation.raise_on_unexpected_return = false
 
   config.raise_on_failure = false
   config.report_on_failure = false

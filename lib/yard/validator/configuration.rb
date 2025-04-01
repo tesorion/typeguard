@@ -34,6 +34,11 @@ module Yard
     Yard.setting_bool self, :raise_on_unexpected_visibility
   end
 
+  setting :validation, reader: true do
+    Yard.setting_bool self, :raise_on_unexpected_argument
+    Yard.setting_bool self, :raise_on_unexpected_return
+  end
+
   # TODO: implement flags below
   setting :raise_on_failure, default: true
   setting :report_on_failure, default: true
