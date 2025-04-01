@@ -10,23 +10,18 @@ module Yard
       end
 
       def resolve!
-        @definitions.each do |definition|
-          case definition
-          when ModuleDefinition, ClassDefinition
-            Object.const_get(definition.name.to_s, true)
-            definition.members.each { |member| resolve_member(member) }
-            # TODO: resolve nested modules/classes and ensure validation gets added
-          when MethodDefinition
-            resolve_member(definition)
-          end
-        end
+        @definitions.each { |definition| resolve_definition(definition) }
       end
 
-      def resolve_member(member)
-        case member
+      def resolve_definition(definition)
+        case definition
+        when ModuleDefinition, ClassDefinition
+          Object.const_get(definition.name.to_s, true)
+          definition.members.each { |member| resolve_definition(member) }
         when MethodDefinition
-          member.parameters.each { |param| param.types.each { |node| resolve_type(node) } }
-          member.returns.types.each { |node| resolve_type(node) }
+          definition.parameters.each { |param| param.types.each { |node| resolve_type(node) } }
+          definition.returns.types.each { |node| resolve_type(node) }
+        else raise "Unexpected definition for '#{definition}'"
         end
       end
 
@@ -51,8 +46,7 @@ module Yard
           # and slow, leaving it up to runtime checks
         when :untyped
           # Always correct
-        else
-          raise "Unknown node shape: #{node.shape}"
+        else raise "Unknown node shape: #{node.shape}"
         end
       end
     end

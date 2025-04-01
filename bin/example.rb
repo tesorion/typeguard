@@ -7,6 +7,27 @@
 # Custom constant
 class Foo; end
 
+# Nested modules and classes
+module One
+  class OneClass; end
+
+  module Two
+    class TwoClass; end
+
+    module Three
+      # Nested class
+      class ThreeClass
+        # @param one [One::OneClass]
+        # @param two [One::Two::TwoClass]
+        # @return [(One::OneClass, One::Two::TwoClass, One::Two::Three::ThreeClass)]
+        def nested_fn(one, two)
+          [one, two, ThreeClass.new]
+        end
+      end
+    end
+  end
+end
+
 # Yardoc validation example
 class Example
   # @return [Object] a regular type
@@ -59,6 +80,13 @@ class Example
   # @return [((Integer, Float), <Symbol>, {Symbol => Integer, Symbol})] shorthands for collections
   def shorthands1(a)
     [[a, a * 0.5], %i[a b], { a: :a, b: a, c: a.to_f }]
+  end
+
+  # @return (see One::Two::Three::ThreeClass#nested_fn)
+  def nested_modules0
+    one = One::OneClass.new
+    two = One::Two::TwoClass.new
+    One::Two::Three::ThreeClass.new.nested_fn(one, two)
   end
 end
 

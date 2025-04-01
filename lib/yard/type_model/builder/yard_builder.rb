@@ -8,7 +8,6 @@ module Yard
       # Takes YARD documentation and returns a generic type model
       class YardBuilder
         include Yard::TypeModel::Definitions
-        # ruby -e "require 'yard';YARD::Registry.load('.yardoc');YARD::Registry.all.each {|m|pp m;m.tags.each {|t|pp t};puts }"
 
         # @see https://rubydoc.info/gems/yard/YARD/Registry
         # @param reparse_files [Boolean] has no effect if target is a string.
@@ -27,6 +26,7 @@ module Yard
         end
 
         def build
+          # ruby -e "require 'yard';YARD::Registry.load('.yardoc');YARD::Registry.all.each {|m|pp m;m.tags.each {|t|pp t};puts }"
           YARD::Registry.root.children.map { |child| build_object(child) }.compact
         end
 

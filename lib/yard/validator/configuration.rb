@@ -40,8 +40,9 @@ module Yard
       return
     end
 
-    builder = Yard::TypeModel::Builder.send(config.source)
-    definitions = builder.new(config.target, config.reparse).build
+    Yard::TypeModel::Builder.send(config.source)
+    builder = TypeModel::Builder::IMPLEMENTATION.new(config.target, config.reparse)
+    definitions = builder.build
     Yard::Resolution::Resolver.new(definitions).resolve!
     Yard::Validation::Wrapper.new(definitions).wrap!
 

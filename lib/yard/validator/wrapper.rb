@@ -10,18 +10,20 @@ module Yard
       end
 
       def wrap!
-        @definitions.each do |definition|
-          case definition
-          when ModuleDefinition, ClassDefinition
-            # Type model does not have nested modules/definitions, no recursion
-            mod = Object.const_get(definition.name)
-            definition.members.grep(MethodDefinition) { |sig| wrap_method(mod, sig) }
-          when MethodDefinition
-            # Method defined in root, as a private instance method of Object
-            wrap_method(Object, definition)
-          else
-            raise "Unexpected definition: #{definition}"
-          end
+        @definitions.each { |definition| wrap_definition(definition) }
+      end
+
+      def wrap_definition(definition)
+        case definition
+        when ModuleDefinition, ClassDefinition
+          mod = Object.const_get(definition.name)
+          definition.members.grep(MethodDefinition) { |sig| wrap_method(mod, sig) }
+          # Wrap nested modules
+          definition.members.grep_v(MethodDefinition) { |child| wrap_definition(child) }
+        when MethodDefinition
+          # Method defined in root, as a private instance method of Object
+          wrap_method(Object, definition)
+        else raise "Unexpected definition for '#{definition}'"
         end
       end
 
@@ -92,8 +94,7 @@ module Yard
         current = mod.instance_method(sig.name)
         mod.define_method(sig.name) do |*args, &blk|
           current.bind_call(self, *args, &blk)
-        rescue TypeError => e
-          puts e
+        rescue TypeError => _e
           Yard::Metrics.report(mod, sig.name)
         end
       end
