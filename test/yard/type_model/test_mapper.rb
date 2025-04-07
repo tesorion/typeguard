@@ -91,6 +91,20 @@ module Yard
         assert_node_equal expected, result
       end
 
+      def test_hash_fixed
+        result = YardMapper.parse_map('Hash<Numeric, String>')
+        expected = TypeNode.new(
+          kind: :Hash,
+          shape: :hash,
+          children: [
+            [TypeNode.new(kind: :Numeric, shape: :basic, children: [], metadata: {})],
+            [TypeNode.new(kind: :String, shape: :basic, children: [], metadata: {})]
+          ],
+          metadata: {}
+        )
+        assert_node_equal expected, result
+      end
+
       def test_hash_explicit
         result = YardMapper.parse_map('Hash{String => Symbol, Number}')
         expected = TypeNode.new(

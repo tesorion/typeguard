@@ -24,7 +24,7 @@ module Yard
             mapped_node.children = children
             mapped_node.metadata[:note] = 'Order-dependent lists must appear in the exact order'
           when YARD::Tags::TypesExplainer::CollectionType
-            if node.name == :Hash && node.types.length == 2
+            if node.name == 'Hash' && node.types.length == 2
               key_node = map_yard(node.types.first)
               value_node = map_yard(node.types.last)
               mapped_node.shape = :hash
