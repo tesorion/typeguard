@@ -39,10 +39,6 @@ module Yard
     Yard.setting_bool self, :raise_on_unexpected_return
   end
 
-  # TODO: implement flags below
-  setting :document_untyped, default: true
-  setting :report_untyped, default: true
-
   def self.process!
     unless config.enabled
       puts 'WARNING: yard-validator disabled'

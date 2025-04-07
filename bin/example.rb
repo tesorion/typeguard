@@ -103,9 +103,6 @@ Yard.configure do |config|
   config.wrapping.raise_on_unexpected_visibility = false
   config.validation.raise_on_unexpected_argument = false
   config.validation.raise_on_unexpected_return = false
-
-  config.document_untyped = false
-  config.report_untyped = false
 end.process!
 
 example = Example.new

@@ -58,14 +58,14 @@ module Yard
                 name: tag.name.to_sym,
                 source: "#{object.file}:#{object.line}",
                 types: build_types(tag),
-                type_strings: tag.types
+                types_string: tag.types.join(' or ')
               )
             end
             return_tag = object.tag(:return)
             returns = ReturnDefinition.new(
               source: "#{object.file}:#{object.line}",
               types: build_types(return_tag),
-              type_strings: return_tag.respond_to?(:types) ? return_tag.types : []
+              types_string: return_tag.respond_to?(:types) ? return_tag.types.join(' or ') : []
             )
             MethodDefinition.new(
               name: object.name,

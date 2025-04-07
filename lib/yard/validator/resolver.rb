@@ -12,7 +12,11 @@ module Yard
 
       def resolve!
         if @config.raise_on_name_error
-          @definitions.each { |definition| resolve_definition(definition) }
+          @definitions.each do |definition|
+            resolve_definition(definition)
+          rescue NameError => e
+            raise(e.class, Metrics.report(Object, definition, :unresolved, e.message), [])
+          end
         else
           # Create compact array of resolved definitions
           resolve_prune_definitions!

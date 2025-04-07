@@ -210,25 +210,20 @@ module Yard
       end
 
       def self.exhaustive_path(mod, method, sig)
-        # TODO: metrics report
         param_validators = sig.parameters.map { |param| param_validator(param.types) }
         return_validator = (param_validator(sig.returns.types) if sig.returns && !sig.returns.types.empty?)
         if return_validator
           mod.module_exec do
             define_method(sig.name) do |*args, &blk|
-              # TODO: cleaner error messages
-              i = 0
-              args.zip(param_validators).each do |arg, param_validator|
-                i += 1
-                unless param_validator.valid?(arg)
-                  raise TypeError,
-                        "Expected #{sig.parameters[i].type_strings} but received: #{arg.inspect}"
-                end
+              args.zip(param_validators).each_with_index do |(arg, param_validator), i|
+                next if param_validator.valid?(arg)
+
+                Metrics.report_unexpected_argument(sig, sig.parameters[i].types_string, arg, mod.name, i)
               end
               result = method.bind_call(self, *args, &blk)
               unless return_validator.valid?(result)
-                raise TypeError,
-                      "Expected #{sig.returns.type_strings} but received: #{result.inspect}"
+                Metrics.report_unexpected_return(sig, sig.returns.types_string, result, mod.name)
+
               end
 
               result
@@ -237,14 +232,10 @@ module Yard
         else
           mod.module_exec do
             define_method(sig.name) do |*args, &blk|
-              # TODO: cleaner error messages
-              i = 0
-              args.zip(param_validators).each do |arg, param_validator|
-                i += 1
-                unless param_validator.valid?(arg)
-                  raise TypeError,
-                        "Expected #{sig.parameters[i].type_strings} but received: #{arg.inspect}"
-                end
+              args.zip(param_validators).each_with_index do |(arg, param_validator), i|
+                next if param_validator.valid?(arg)
+
+                Metrics.report_unexpected_argument(sig, sig.parameters[i].types_string, arg, mod.name, i)
               end
               method.bind_call(self, *args, &blk)
             end
