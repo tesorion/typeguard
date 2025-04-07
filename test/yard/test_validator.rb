@@ -6,8 +6,8 @@ require_relative '../assets/basic'
 module Yard
   module Test
     class TypesValidator < Minitest::Test
-      include NestedOnce
-      include NestedOnce::NestedTwice
+      include Yard::Test::NestedOnce
+      include Yard::Test::NestedOnce::NestedTwice
 
       Yard.configure do |config|
         config.enabled = true
