@@ -37,43 +37,43 @@ module Yard
 
             # TODO: type parameters? #initialize captured by :methods
             ClassDefinition.new(
-              { name: object.path,
-                source: "#{object.file}:#{object.line}",
-                parent: object.superclass&.path,
-                type_parameters: nil,
-                children: children }
+              name: object.path,
+              source: "#{object.file}:#{object.line}",
+              parent: object.superclass&.path,
+              type_parameters: nil,
+              children: children
             )
           when :module
             children = object.children.map { |child| build_object(child) }.compact
 
             ModuleDefinition.new(
-              { name: object.path,
-                source: "#{object.file}:#{object.line}",
-                type_parameters: nil,
-                children: children }
+              name: object.path,
+              source: "#{object.file}:#{object.line}",
+              type_parameters: nil,
+              children: children
             )
           when :method
             parameters = object.tags(:param).map do |tag|
               ParameterDefinition.new(
-                { name: tag.name.to_sym,
-                  source: "#{object.file}:#{object.line}",
-                  types: build_types(tag),
-                  types_string: tag.types.join(' or ') }
+                name: tag.name.to_sym,
+                source: "#{object.file}:#{object.line}",
+                types: build_types(tag),
+                types_string: tag.types.join(' or ')
               )
             end
             return_tag = object.tag(:return)
             returns = ReturnDefinition.new(
-              { source: "#{object.file}:#{object.line}",
-                types: build_types(return_tag),
-                types_string: return_tag.respond_to?(:types) ? return_tag.types.join(' or ') : [] }
+              source: "#{object.file}:#{object.line}",
+              types: build_types(return_tag),
+              types_string: return_tag.respond_to?(:types) ? return_tag.types.join(' or ') : []
             )
             MethodDefinition.new(
-              { name: object.name,
-                source: "#{object.file}:#{object.line}",
-                scope: object.scope,
-                visibility: object.visibility,
-                parameters: parameters,
-                returns: returns }
+              name: object.name,
+              source: "#{object.file}:#{object.line}",
+              scope: object.scope,
+              visibility: object.visibility,
+              parameters: parameters,
+              returns: returns
             )
           when :constant, :classvariable
             raise "Not implemented: #{object.class}"
@@ -87,10 +87,10 @@ module Yard
             tag.types.map { |t| Yard::TypeModel::Mapper::YardMapper.parse_map(t) }
           else
             result = TypeNode.new(
-              { kind: :untyped,
-                shape: :untyped,
-                children: [],
-                metadata: { note: 'Types specifier list is empty: untyped' } }
+              kind: :untyped,
+              shape: :untyped,
+              children: [],
+              metadata: { note: 'Types specifier list is empty: untyped' }
             )
             [result]
           end
