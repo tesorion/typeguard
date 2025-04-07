@@ -1,0 +1,75 @@
+# Custom constant
+class Foo
+end
+
+# Nested modules and classes
+module One
+  class OneClass
+  end
+
+  module Two
+    class TwoClass
+    end
+
+    module Three
+      # Nested class
+      class ThreeClass
+        # _@param_ `one`
+        # 
+        # _@param_ `two`
+        def nested_fn: (One::OneClass one, One::Two::TwoClass two) -> [One::OneClass, One::Two::TwoClass, One::Two::Three::ThreeClass]
+      end
+    end
+  end
+end
+
+# Yardoc validation example
+class Example
+  # _@return_ — a regular type
+  def regular0: () -> Object
+
+  # _@return_ — Ruby literal 'true'
+  def literal0: () -> bool
+
+  # sord duck - #push looks like a duck type, replacing with untyped
+  # _@return_ — duck-type: responds to :push
+  def duck0: () -> untyped
+
+  # _@param_ `a` — Integer to double
+  # 
+  # _@return_ — double of a
+  def double1: (Integer a) -> Integer
+
+  # _@param_ `a`
+  # 
+  # _@param_ `b`
+  # 
+  # _@return_ — generic array of numbers
+  def generic_array2: (Integer a, Integer b) -> ::Array[(Integer | Float)]
+
+  # _@param_ `a`
+  # 
+  # _@return_ — fixed array with order Symbol -> Integer
+  def fixed_array1: (Integer a) -> [Symbol, Integer]
+
+  # sord warn - Invalid hash, must have exactly two types: "Hash{Symbol => Integer, Float}".
+  # _@param_ `a`
+  # 
+  # _@return_ — special hash syntax with 1 key and 2 value types
+  def special_hash1: (Integer a) -> untyped
+
+  # sord duck - #push looks like a duck type, replacing with untyped
+  # sord warn - Invalid hash, must have exactly two types: "Hash{Symbol, String => Boolean, Array<Array(Foo, #push, Set<Integer>)>}".
+  # _@param_ `a`
+  # 
+  # _@return_ — complex types
+  def complex1: (Integer a) -> untyped
+
+  # sord warn - Invalid hash, must have exactly two types: "{Symbol => Integer, Symbol}".
+  # _@param_ `a`
+  # 
+  # _@return_ — shorthands for collections
+  def shorthands1: (Integer a) -> [[Integer, Float], ::Array[Symbol], untyped]
+
+  def nested_modules0: () -> [One::OneClass, One::Two::TwoClass, One::Two::Three::ThreeClass]
+end

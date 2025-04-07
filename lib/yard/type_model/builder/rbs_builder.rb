@@ -26,6 +26,10 @@ module Yard
           rbs_loader.add(path: Pathname(target))
           @rbs_env = RBS::Environment.from_loader(rbs_loader)
         end
+
+        def build
+          false
+        end
       end
     end
   end
