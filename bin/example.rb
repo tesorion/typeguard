@@ -93,11 +93,11 @@ end
 require_relative '../lib/yard/validator'
 
 Yard.configure do |config|
+  config.source = :rbs
+  config.target = 'sig'
+  # config.source = :yard
+  # config.target = ['bin/example.rb']
   config.enabled = true
-  config.source = :yard
-  # config.source = :rbs
-  config.target = ['bin/example.rb']
-  # config.target = 'sig'
   config.reparse = true
   config.at_exit_report = true
   config.resolution.raise_on_name_error = false

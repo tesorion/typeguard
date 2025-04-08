@@ -45,12 +45,12 @@ module Yard
       return
     end
 
+    Yard::Metrics.config(config.validation)
     Yard::TypeModel::Builder.send(config.source)
     builder = TypeModel::Builder::IMPLEMENTATION.new(config.target, config.reparse)
     definitions = builder.build
     Yard::Resolution::Resolver.new(definitions, config.resolution).resolve!
     Yard::Validation::Wrapper.new(definitions, config.wrapping).wrap!
-
     at_exit { Yard::Metrics.flush } if config.at_exit_report
   end
 end

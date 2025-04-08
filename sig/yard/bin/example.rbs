@@ -72,4 +72,6 @@ class Example
   def shorthands1: (Integer a) -> [[Integer, Float], ::Array[Symbol], untyped]
 
   def nested_modules0: () -> [One::OneClass, One::Two::TwoClass, One::Two::Three::ThreeClass]
+
 end
+

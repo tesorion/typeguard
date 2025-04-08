@@ -4,12 +4,19 @@ module Yard
   module Metrics
     Log = Struct.new(:module, :definition, :type, :error, :message, :source)
 
+    @raise_on_unexpected_argument = false
+    @raise_on_unexpected_return = false
     @logs = []
+
+    def self.config(validation)
+      @raise_on_unexpected_argument = validation.raise_on_unexpected_argument
+      @raise_on_unexpected_return = validation.raise_on_unexpected_return
+    end
 
     def self.flush
       new_line = "\n" unless @logs.empty?
       puts "\nyard-validation errors [start]: #{@logs.length} #{new_line}\n"
-      @logs.each { |log| puts log.message }
+      @logs.each { |log| puts "- #{log.message}" }
       puts "\nyard-validation errors [end]: #{@logs.length} #{new_line}"
     end
 
@@ -32,7 +39,7 @@ module Yard
       "in method '#{mod_name}##{name}' defined in #{source} and " \
       "called from #{caller_string}"
       @logs << Log.new(mod_name, sig.name, :ReturnDefinition, :unexpected_return, msg, source)
-      raise TypeError, msg if Yard.config.validation.raise_on_unexpected_return
+      raise TypeError, msg if @raise_on_unexpected_argument
     end
 
     def self.report_unexpected_argument(sig, expected, actual, mod_name, param_index)
@@ -42,12 +49,12 @@ module Yard
       method_name = sig.name
       parameter_name = parameter.name
       source = parameter.source
-      msg = "Expected #{expected} but received incompatible #{actual.class} " \
+      msg = "UNEXPECTED_ARGUMENT Expected #{expected} but received incompatible #{actual.class} " \
       "for parameter '#{parameter_name}' " \
       "in method '#{mod_name}##{method_name}' defined in #{source} and " \
       "called from #{caller_string}"
       @logs << Log.new(mod_name, method_name, :ParameterDefinition, :unexpected_argument, msg, source)
-      raise TypeError, msg if Yard.config.validation.raise_on_unexpected_argument
+      raise TypeError, msg if @raise_on_unexpected_return
     end
   end
 end

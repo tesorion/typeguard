@@ -5,7 +5,7 @@ require_relative '../assets/basic'
 
 module Yard
   module Test
-    class TypesValidator < Minitest::Test
+    class YardValidator < Minitest::Test
       include Yard::Test::NestedOnce
       include Yard::Test::NestedOnce::NestedTwice
 

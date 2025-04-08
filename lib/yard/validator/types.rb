@@ -24,7 +24,7 @@ module Yard
         when :duck
           Duck.new(node)
         when :untyped
-          Untyped.new(node)
+          Untyped.new
         else
           raise "Unexpected type node shape: #{node.shape}"
         end
@@ -131,7 +131,7 @@ module Yard
     end
 
     class Untyped < Base
-      def valid?(value)
+      def valid?(_)
         true
       end
     end

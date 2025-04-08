@@ -1,0 +1,55 @@
+module Yard
+  module Test
+    module NestedOnce
+      class NestedClassOne
+      end
+
+      module NestedTwice
+        class NestedClassTwo
+        end
+      end
+    end
+
+    class Basic
+      # _@param_ `lhs`
+      # 
+      # _@param_ `rhs`
+      def add: (Integer lhs, Integer rhs) -> Integer
+
+      # _@param_ `arr` — array of integers
+      # 
+      # _@return_ — sum of array
+      def total: (::Array[Integer] arr) -> Integer
+
+      # _@param_ `arr` — fixed array of string and integer
+      def fixed_array: ([String, Integer] arr) -> [String, Integer, String]
+
+      # _@param_ `hash` — hash with one key and two value types
+      # 
+      # _@return_ — hash with added value type
+      # def hash_rocket: (SORD_ERROR_StringIntegerFloat hash) -> SORD_ERROR_StringSymbolIntegerFloatString
+
+      # _@param_ `key_type` — numeric key
+      # 
+      # _@param_ `value_type` — numeric value
+      # 
+      # _@return_ — hash with numeric key and numeric value
+      def fixed_hash: (Numeric key_type, Numeric value_type) -> ::Hash[Numeric, Numeric]
+
+      # sord duck - #push looks like a duck type, replacing with untyped
+      # sord duck - #push looks like a duck type, replacing with untyped
+      # sord duck - #push looks like a duck type, replacing with untyped
+      # _@param_ `pushable` — object responds to :push
+      # 
+      # _@param_ `element` — element to push responds to :push
+      # 
+      # _@return_ — the pushable object with the element added
+      def duck_push: (untyped pushable, untyped element) -> untyped
+
+      # _@param_ `klass_instance` — nested class one
+      # 
+      # _@return_ — array of nested classes
+      def nested_classes: (Yard::Test::NestedOnce::NestedClassOne klass_instance) -> [Yard::Test::NestedOnce::NestedClassOne, Yard::Test::NestedOnce::NestedTwice::NestedClassTwo]
+    end
+  end
+end
