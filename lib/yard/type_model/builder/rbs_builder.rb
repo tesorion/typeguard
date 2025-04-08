@@ -9,11 +9,17 @@ module Yard
       class RBSBuilder
         include Yard::TypeModel::Definitions
 
+        attr_reader :rbs_env
+
         # @return [Yard::Initializer::RBSInitalizer] initializer for RBS signatures
         def initialize(target, _reparse)
           rbs_loader = RBS::EnvironmentLoader.new(core_root: nil)
           rbs_loader.add(path: Pathname(target))
           @rbs_env = RBS::Environment.from_loader(rbs_loader).resolve_type_names
+          return unless @rbs_env.declarations.empty?
+
+          puts "WARNING: could not find RBS signatures for target directory '#{target}'. " \
+          'Confirm that the directory exists and/or that it contains .rbs files.'
         end
 
         #  ruby -e "require 'rbs';loader=RBS::EnvironmentLoader.new(core_root: nil);loader.add(path:Pathname('sig'));environment=RBS::Environment.from_loader(loader);environment.declarations.each{|cls,entries|pp cls;pp entries}"

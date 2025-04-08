@@ -11,14 +11,14 @@ module Yard
       include Yard::TypeModel::Builder
 
       def setup
-        Yard::TypeModel::Builder.yard
         @test_path = 'test/assets/'
-        @builder = Yard::TypeModel::Builder::IMPLEMENTATION.new([], false)
+        @builder = Yard::TypeModel::Builder::YardBuilder.new([], false)
       end
 
       def new_builder(target = ['undocumented'], reparse: true)
+        YARD::Registry.clear
         target = Array(target).map { |t| "#{@test_path}#{t}.rb" }
-        @builder = Yard::TypeModel::Builder::IMPLEMENTATION.new(target, reparse)
+        @builder = Yard::TypeModel::Builder::YardBuilder.new(target, reparse)
       end
 
       def test_builder_filled_silent
@@ -26,7 +26,6 @@ module Yard
       end
 
       def test_builder_empty_warning
-        YARD::Registry.clear
         assert_output(/WARNING/) { new_builder('empty').build }
       end
 
