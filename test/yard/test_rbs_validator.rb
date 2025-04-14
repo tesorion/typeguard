@@ -1,28 +1,25 @@
 # frozen_string_literal: true
 
 require 'test_helper'
-require_relative '../assets/basic'
+require_relative '../assets/rbs/basic_rbs'
 
 module Yard
   module Test
     class RBSValidator < Minitest::Test
-      include Yard::Test::NestedOnce
-      include Yard::Test::NestedOnce::NestedTwice
+      include Yard::Test::RBSTest
+      include Yard::Test::RBSTest::NestedOnce
+      include Yard::Test::RBSTest::NestedOnce::NestedTwice
 
-      # TODO: separate configuration/runtime for rbs/yard
-
-      def setup
-        Yard.configure do |config|
-          config.enabled = true
-          config.source = :rbs
-          config.target = 'test/assets'
-          config.reparse = false
-          config.at_exit_report = false
-          config.resolution.raise_on_name_error = true
-          config.validation.raise_on_unexpected_argument = true
-          config.validation.raise_on_unexpected_return = true
-        end.process!
-      end
+      Yard.configure do |config|
+        config.enabled = true
+        config.source = :rbs
+        config.target = 'test/assets/rbs'
+        config.reparse = false
+        config.at_exit_report = false
+        config.resolution.raise_on_name_error = true
+        config.validation.raise_on_unexpected_argument = true
+        config.validation.raise_on_unexpected_return = true
+      end.process!
 
       def test_that_it_has_a_version_number
         refute_nil(::Yard::Validator::VERSION)

@@ -1,18 +1,19 @@
 # frozen_string_literal: true
 
 require 'test_helper'
-require_relative '../assets/basic'
+require_relative '../assets/yard/basic_yard'
 
 module Yard
   module Test
     class YardValidator < Minitest::Test
-      include Yard::Test::NestedOnce
-      include Yard::Test::NestedOnce::NestedTwice
+      include Yard::Test::YardTest
+      include Yard::Test::YardTest::NestedOnce
+      include Yard::Test::YardTest::NestedOnce::NestedTwice
 
       Yard.configure do |config|
         config.enabled = true
         config.source = :yard
-        config.target = ['test/assets/basic.rb']
+        config.target = ['test/assets/yard/basic_yard.rb']
         config.reparse = true
         config.at_exit_report = false
         config.resolution.raise_on_name_error = true
