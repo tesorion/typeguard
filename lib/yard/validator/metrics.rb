@@ -39,7 +39,7 @@ module Yard
       "in method '#{mod_name}##{name}' defined in #{source} and " \
       "called from #{caller_string}"
       @logs << Log.new(mod_name, sig.name, :ReturnDefinition, :unexpected_return, msg, source)
-      raise TypeError, msg if @raise_on_unexpected_argument
+      raise TypeError, msg if @raise_on_unexpected_return
     end
 
     def self.report_unexpected_argument(sig, expected, actual, mod_name, param_index)
@@ -54,7 +54,7 @@ module Yard
       "in method '#{mod_name}##{method_name}' defined in #{source} and " \
       "called from #{caller_string}"
       @logs << Log.new(mod_name, method_name, :ParameterDefinition, :unexpected_argument, msg, source)
-      raise TypeError, msg if @raise_on_unexpected_return
+      raise TypeError, msg if @raise_on_unexpected_argument
     end
   end
 end
