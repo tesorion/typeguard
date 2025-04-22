@@ -19,6 +19,42 @@ module Yard
           lhs + rhs
         end
 
+        # The argument order is swapped, arguments are interpreted incorrectly
+        # @param rhs [Integer]
+        # @param lhs [String]
+        # @return [String]
+        def add_number_to_string(lhs, rhs)
+          lhs + rhs.to_s
+        end
+
+        # @param base [Integer]
+        # @param arr [Array<Integer>]
+        # @return [Integer]
+        def add_with_splat_argument(base, *arr)
+          arr.sum(base)
+        end
+
+        # @param lhs [Integer]
+        # @param rhs [Integer]
+        # @return [Integer]
+        def add_with_optional_argument(lhs, rhs = 1.0)
+          lhs + rhs
+        end
+
+        # @param lhs [Integer]
+        # @param rhs [Integer]
+        # @return [Integer]
+        def add_with_keyword_arguments(lhs:, rhs:)
+          lhs + rhs
+        end
+
+        # @param lhs [Integer]
+        # @param rhs [Integer]
+        # @return [Integer]
+        def add_with_keyword_arguments_with_default(lhs:, rhs: 1)
+          lhs + rhs
+        end
+
         # @param arr [Array<Integer>] array of integers
         # @return [Integer] sum of array
         def total(arr)

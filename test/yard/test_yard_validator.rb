@@ -33,6 +33,27 @@ module Yard
         assert_raises(TypeError, 'it cannot add strings') { Basic.new.add('a', 'b') }
       end
 
+      def test_add_number_to_string
+        assert_equal('one2', Basic.new.add_number_to_string(2, 'one'))
+      end
+
+      def test_add_with_splat_argument
+        assert_equal(16, Basic.new.add_with_splat_argument(10, 1, 2, 3))
+      end
+
+      def test_add_with_optional_argument
+        assert_equal(3, Basic.new.add_with_optional_argument(1, 2))
+        assert_equal(3.0, Basic.new.add_with_optional_argument(2))
+      end
+
+      def test_add_with_keyword_arguments
+        assert_equal(3, Basic.new.add_with_keyword_arguments(lhs: 1, rhs: 2))
+      end
+
+      def test_add_with_keyword_arguments_with_default
+        assert_equal(3, Basic.new.add_with_keyword_arguments_with_default(lhs: 2))
+      end
+
       def test_total_works_with_integer_array
         assert_equal(10, Basic.new.total([3, 3, 4]), 'it can add integer arrays')
       end
