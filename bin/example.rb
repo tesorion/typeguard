@@ -82,7 +82,10 @@ class Example
     [[a, a * 0.5], %i[a b], { a: :a, b: a, c: a.to_f }]
   end
 
+  protected
+
   # @return (see One::Two::Three::ThreeClass#nested_fn)
+  # @!visibility protected
   def nested_modules0
     one = One::OneClass.new
     two = One::Two::TwoClass.new

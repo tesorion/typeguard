@@ -34,7 +34,7 @@ module Yard
       caller_string = "#{caller.path}:#{caller.lineno}"
       name = sig.name
       source = sig.returns.source
-      msg = "Expected #{return_object} but received incompatible #{result.class} " \
+      msg = "UNEXPECTED_RETURN Expected #{return_object} but received incompatible #{result.class} " \
       'from return statement ' \
       "in method '#{mod_name}##{name}' defined in #{source} and " \
       "called from #{caller_string}"
