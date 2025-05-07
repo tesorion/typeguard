@@ -1,4 +1,8 @@
+# frozen_string_literal: true
+
 require_relative '../lib/yard/validator'
+
+# rubocop:disable all
 
 class Fix
   # The argument order is swapped, arguments are interpreted incorrectly
