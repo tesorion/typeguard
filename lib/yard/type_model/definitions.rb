@@ -7,7 +7,7 @@ module Yard
       ModuleDefinition = Struct.new(:name, :source, :type_parameters, :children, keyword_init: true)
       ClassDefinition = Struct.new(:name, :source, :parent, :type_parameters, :children, keyword_init: true)
       MethodDefinition = Struct.new(:name, :source, :scope, :visibility, :parameters, :returns, keyword_init: true)
-      ParameterDefinition = Struct.new(:name, :source, :types, :types_string, keyword_init: true)
+      ParameterDefinition = Struct.new(:name, :source, :default, :types, :types_string, keyword_init: true)
       ReturnDefinition = Struct.new(:source, :types, :types_string, keyword_init: true)
     end
   end

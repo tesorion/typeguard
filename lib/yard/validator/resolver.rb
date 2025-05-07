@@ -63,7 +63,7 @@ module Yard
         when :generic, :fixed
           node.metadata[:const] ||= Object.const_get(node.kind.to_s, true)
           node.children.each { |child_node| resolve_type(child_node) }
-        when :hash
+        when :hash, :fixed_hash
           node.metadata[:const] ||= Object.const_get(node.kind.to_s, true)
           node.children.flatten.each { |child_node| resolve_type(child_node) }
         when :union

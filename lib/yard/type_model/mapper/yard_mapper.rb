@@ -41,7 +41,7 @@ module Yard
             value_nodes = node.value_types.map { |v| map_yard(v) }
             mapped_node.shape = :hash
             mapped_node.children = [key_nodes, value_nodes]
-            mapped_node.metadata[:note] = 'Hash specified via parametrized types: one key and one value type'
+            mapped_node.metadata[:note] = 'Hash specified via rocket syntax: multiple key and value type'
           when YARD::Tags::TypesExplainer::Type
             map_base(node, mapped_node)
           else raise "Unknown node type: #{node.class}"

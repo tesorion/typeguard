@@ -42,10 +42,9 @@ module Yard
       raise TypeError, msg if @raise_on_unexpected_return
     end
 
-    def self.report_unexpected_argument(sig, expected, actual, mod_name, param_index)
-      caller = caller_locations(5, 1).first
+    def self.report_unexpected_argument(sig, expected, actual, mod_name, parameter)
+      caller = caller_locations(4, 1).first
       caller_string = "#{caller.path}:#{caller.lineno}"
-      parameter = sig.parameters[param_index]
       method_name = sig.name
       parameter_name = parameter.name
       source = parameter.source

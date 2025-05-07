@@ -13,6 +13,8 @@ module Yard
           Fixed.new(node)
         when :hash
           GenericHash.new(node)
+        when :fixed_hash
+          FixedHash.new(node)
         when :union
           Union.new(node)
         when :literal
@@ -89,6 +91,32 @@ module Yard
         value.all? do |k, v|
           key_valid = @keys.any? { |child| child.valid?(k) }
           value_valid = @values.any? { |child| child.valid?(v) }
+          key_valid && value_valid
+        end
+      end
+    end
+
+    class FixedHash < Base
+      def initialize(node)
+        @klass = node.metadata[:const]
+        @map = node.children.transpose.each_with_object({}) do |(k, v), h|
+          index = k.metadata[:key]
+          k_validator = Base.from(k)
+          v_validators = v.map { |val| Base.from(val) }
+          h[index] = [k_validator, v_validators]
+        end
+      end
+
+      def valid?(value)
+        return false unless value.is_a?(@klass)
+
+        value.all? do |k, v|
+          index = k.to_s
+          return false unless @map.key?(index)
+
+          k_validator, v_validator = @map[index]
+          key_valid = k_validator.valid?(k)
+          value_valid = v_validator.any? { |child| child.valid?(v) }
           key_valid && value_valid
         end
       end

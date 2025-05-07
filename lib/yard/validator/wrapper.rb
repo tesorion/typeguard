@@ -45,21 +45,7 @@ module Yard
       end
 
       def define_wrapper(mod, method, sig)
-        required_params = method.parameters.all? { |type, _| type == :req } && sig.parameters.size <= 5
-        simple_params = required_params && sig.parameters.all? do |param|
-          param.types.size == 1 && param.types.first.shape == :basic
-        end
-        simple_return = sig.returns.types.size == 1 && sig.returns.types.first.shape == :basic
-        any_return = sig.returns.types.all? do |type|
-          type.shape == :untyped || %i[void self].include?(type.kind)
-        end
-        if simple_params && simple_return
-          Validator.standard_path(mod, method, sig)
-        elsif simple_params && any_return
-          Validator.fastest_path(mod, method, sig)
-        else
-          Validator.exhaustive_path(mod, method, sig)
-        end
+        Validator.exhaustive_path(mod, method, sig)
       end
 
       def check_arity(mod, sig, original_method)

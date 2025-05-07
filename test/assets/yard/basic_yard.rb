@@ -37,7 +37,14 @@ module Yard
         # @param lhs [Integer]
         # @param rhs [Integer]
         # @return [Integer]
-        def add_with_optional_argument(lhs, rhs = 1.0)
+        def add_with_optional_argument(lhs, rhs = 1)
+          lhs + rhs
+        end
+
+        # @param lhs [Integer]
+        # @param rhs [Integer]
+        # @return [Integer]
+        def add_with_incorrect_optional_argument(lhs, rhs = 1.0)
           lhs + rhs
         end
 

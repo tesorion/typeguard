@@ -34,7 +34,7 @@ module Yard
       end
 
       def test_add_number_to_string
-        assert_equal('one2', Basic.new.add_number_to_string(2, 'one'))
+        assert_equal('one2', Basic.new.add_number_to_string('one', 2))
       end
 
       def test_add_with_splat_argument
@@ -44,6 +44,10 @@ module Yard
       def test_add_with_optional_argument
         assert_equal(3, Basic.new.add_with_optional_argument(1, 2))
         assert_equal(3.0, Basic.new.add_with_optional_argument(2))
+      end
+
+      def test_add_with_incorrect_optional_argument
+        assert_raises(TypeError, 'it cannot have float as default') { Basic.new.add_with_incorrect_optional_argument(1) }
       end
 
       def test_add_with_keyword_arguments
@@ -91,11 +95,11 @@ module Yard
       end
 
       def test_fixed_numeric_hash_raises_key_error
-        assert_raises(TypeError, 'it cannot have string keys') { Basic.new.fixed_hash(Hash['1' => 2]) }
+        assert_raises(ArgumentError, 'it cannot have string keys') { Basic.new.fixed_hash(Hash['1' => 2]) }
       end
 
       def test_fixed_numeric_hash_raises_value_error
-        assert_raises(TypeError, 'it cannot have string values') { Basic.new.fixed_hash(Hash[1 => '2']) }
+        assert_raises(ArgumentError, 'it cannot have string values') { Basic.new.fixed_hash(Hash[1 => '2']) }
       end
 
       def test_duck_push_works_with_array
