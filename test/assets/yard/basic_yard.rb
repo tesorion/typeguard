@@ -100,6 +100,12 @@ module Yard
         def nested_classes(klass_instance)
           [klass_instance, NestedOnce::NestedTwice::NestedClassTwo.new]
         end
+
+        # @param value [Integer]
+        # @return [Integer]
+        def writer=(value)
+          value.to_s
+        end
       end
     end
   end

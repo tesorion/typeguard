@@ -121,6 +121,11 @@ module Yard
           Basic.new.nested_classes(NestedClassTwo.new)
         end
       end
+
+      def test_attr_writer
+        b = Basic.new
+        assert_equal(1, (b.writer = 1))
+      end
     end
   end
 end
