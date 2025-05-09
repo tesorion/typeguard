@@ -12,7 +12,8 @@ module Yard
       end
 
       class Basic
-        SOME_CONST = 1
+        def initialize
+        end
 
         # @param lhs [Integer]
         # @param rhs [Integer]
