@@ -12,6 +12,8 @@ module Yard
       end
 
       class Basic
+        SOME_CONST = 1
+
         # @param lhs [Integer]
         # @param rhs [Integer]
         # @return [Integer]
