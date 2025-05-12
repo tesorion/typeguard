@@ -12,8 +12,7 @@ module Yard
       end
 
       class Basic
-        def initialize
-        end
+        def initialize; end
 
         # @param lhs [Integer]
         # @param rhs [Integer]

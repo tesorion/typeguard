@@ -56,43 +56,6 @@ module Yard
               children: children
             )
           when :method
-            unbound_children = object.tags(:option).each_with_object({}) do |tag, hash|
-              index = tag.name.gsub(/:/, '')
-              hash[index] ||= [[], []]
-              key = build_symbol
-              key.metadata[:key] = tag.pair.name.gsub(/:/, '')
-              value = build_types(tag.pair)
-              value.each { |node| node.metadata[:defaults] = tag.pair.defaults }
-              hash[index].first << key
-              hash[index].last << value
-            end
-
-            ps = object.parameters
-            parameters = object.tags(:param).map do |tag|
-              p_name, p_default = ps.find { |name, _| name.gsub(/[*:]/, '') == tag.name }
-              next unless p_name
-
-              bound_children = unbound_children.delete(tag.name)
-              ParameterDefinition.new(
-                name: tag.name.to_sym,
-                source: "#{object.file}:#{object.line}",
-                default: p_default,
-                types: bound_children ? [build_fixed_hash(bound_children)] : build_types(tag),
-                types_string: build_types_string(tag)
-              )
-            end
-
-            unbound_children.each do |k, v|
-              parameter = ParameterDefinition.new(
-                name: k,
-                source: "#{object.file}:#{object.line}",
-                default: nil,
-                types: [build_fixed_hash(v)],
-                types_string: 'Hash'
-              )
-              parameters << parameter
-            end
-
             return_tag = object.tag(:return)
             returns = ReturnDefinition.new(
               source: "#{object.file}:#{object.line}",
@@ -104,7 +67,7 @@ module Yard
               source: "#{object.file}:#{object.line}",
               scope: object.scope,
               visibility: object.visibility,
-              parameters: parameters,
+              parameters: build_parameters(object),
               returns: returns
             )
           when :constant, :classvariable, :proxy
@@ -112,6 +75,47 @@ module Yard
           else
             raise "Unsupported YARD object: #{object.class}"
           end
+        end
+
+        def build_parameters(object)
+          unbound_children = object.tags(:option).each_with_object({}) do |tag, hash|
+            index = tag.name.gsub(/:/, '')
+            hash[index] ||= [[], []]
+            key = build_symbol
+            key.metadata[:key] = tag.pair.name.gsub(/:/, '')
+            value = build_types(tag.pair)
+            value.each { |node| node.metadata[:defaults] = tag.pair.defaults }
+            hash[index].first << key
+            hash[index].last << value
+          end
+
+          ps = object.parameters
+          parameters = object.tags(:param).map do |tag|
+            p_name, p_default = ps.find { |name, _| name.gsub(/[*:]/, '') == tag.name }
+            next unless p_name
+
+            bound_children = unbound_children.delete(tag.name)
+            ParameterDefinition.new(
+              name: tag.name.to_sym,
+              source: "#{object.file}:#{object.line}",
+              default: p_default,
+              types: bound_children ? [build_fixed_hash(bound_children)] : build_types(tag),
+              types_string: build_types_string(tag)
+            )
+          end
+
+          unbound_children.each do |k, v|
+            parameter = ParameterDefinition.new(
+              name: k,
+              source: "#{object.file}:#{object.line}",
+              default: nil,
+              types: [build_fixed_hash(v)],
+              types_string: 'Hash'
+            )
+            parameters << parameter
+          end
+
+          parameters
         end
 
         def build_inherit_vars(object)

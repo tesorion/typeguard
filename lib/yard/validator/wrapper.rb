@@ -34,18 +34,22 @@ module Yard
       end
 
       def wrap_method(mod, sig)
+        return if unsafe_method?(sig)
+
         target = sig.scope == :class ? mod.singleton_class : mod
-        # use sym name instead of string?
         method_name = sig.name
         original_method = target.instance_method(method_name)
         check_arity(mod, sig, original_method)
         actual_visibility = check_visibility(target, mod, sig, method_name)
-        define_wrapper(mod, original_method, sig)
+        Validator.exhaustive_path(mod, original_method, sig)
         target.send(actual_visibility, method_name)
       end
 
-      def define_wrapper(mod, method, sig)
-        Validator.exhaustive_path(mod, method, sig)
+      def unsafe_method?(sig)
+        # It is unsafe to redefine these methods because
+        # the return type is not always the same: assignment
+        # vs method call
+        sig.name == :initialize || sig.name.to_s =~ /=$/
       end
 
       def check_arity(mod, sig, original_method)

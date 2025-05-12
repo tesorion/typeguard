@@ -30,6 +30,8 @@ module Yard
           definition.children.each { |child| resolve_definition(child) }
         when MethodDefinition
           definition.parameters.each { |param| param.types.each { |node| resolve_type(node) } }
+          return if definition.name == :initialize # Ignore YARD default tag
+
           definition.returns.types.each { |node| resolve_type(node) }
         else raise "Unexpected definition for '#{definition}'"
         end
@@ -45,6 +47,8 @@ module Yard
             Object.const_get(definition.name.to_s, true)
           when MethodDefinition
             definition.parameters.each { |param| param.types.each { |node| resolve_type(node) } }
+            next if definition.name == :initialize # Ignore YARD default tag
+
             definition.returns.types.each { |node| resolve_type(node) }
           end
           false

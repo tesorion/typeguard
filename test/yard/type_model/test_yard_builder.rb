@@ -32,14 +32,14 @@ module Yard
       def test_build_module_definition
         module_definition = YARD::CodeObjects::ModuleObject.new(:root, 'Mod')
         actual = @builder.build_object(module_definition)
-        expected = ModuleDefinition.new(name: 'Mod', source: ':', children: [])
+        expected = ModuleDefinition.new(name: 'Mod', source: ':', vars: [], children: [])
         assert_equal(expected, actual)
       end
 
       def test_build_class_definition
         class_definition = YARD::CodeObjects::ClassObject.new(:root, 'Klass')
         actual = @builder.build_object(class_definition)
-        expected = ClassDefinition.new(name: 'Klass', source: ':', parent: 'Object', children: [])
+        expected = ClassDefinition.new(name: 'Klass', source: ':', vars: [], parent: 'Object', children: [])
         assert_equal(expected, actual)
       end
 
