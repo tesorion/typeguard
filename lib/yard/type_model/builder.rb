@@ -7,6 +7,7 @@ module Yard
       # NOTE: no const_defined? check for now
 
       def self.yard
+        puts 'setting up yard in builder.rb'
         require_relative 'builder/yard_builder'
         require_relative 'mapper/yard_mapper'
         const_set(IMPL_SYM, YardBuilder)
