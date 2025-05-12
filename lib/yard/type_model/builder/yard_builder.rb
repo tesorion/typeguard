@@ -28,7 +28,7 @@ module Yard
 
         def build
           # Deduplicated tree-like structure where the root is an array of
-          # objects whose parent is undefined or YARD root/proxy.
+          # objects whose parent is undefined or YARD root/proxy
           YARD::Registry.all(:class, :module, :method).filter_map do |object|
             build_object(object) if object.parent.nil? || %i[root proxy].include?(object.parent.type)
           end
@@ -39,7 +39,7 @@ module Yard
           when :class
             children = object.children.map { |child| build_object(child) }.compact
             ClassDefinition.new(
-              name: object.path,
+              name: object.path.gsub('.self', ''),
               source: "#{object.file}:#{object.line}",
               vars: build_inherit_vars(object),
               parent: object.superclass&.path,
@@ -49,7 +49,7 @@ module Yard
           when :module
             children = object.children.map { |child| build_object(child) }.compact
             ModuleDefinition.new(
-              name: object.path,
+              name: object.path.gsub('.self', ''),
               source: "#{object.file}:#{object.line}",
               vars: build_inherit_vars(object),
               type_parameters: nil,
@@ -132,6 +132,15 @@ module Yard
 
         def build_vars(object)
           return [] unless %i[class module].include?(object.type)
+
+          # NOTE: When a module is defined with .self syntax
+          # and also referenced with :: syntax, the reference
+          # is interpreted as a proxy. You could eventually
+          # find the actual code object, but iteratively
+          # replacing every :: with .self or vice versa and
+          # performing the lookup is not very nice. So, we
+          # simply don't propagate in this case.
+          return [] if object.is_a? YARD::CodeObjects::Proxy
 
           vars = []
           object.cvars.each do |cvar|
