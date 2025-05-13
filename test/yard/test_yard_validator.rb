@@ -126,6 +126,14 @@ module Yard
         b = Basic.new
         assert_equal(1, (b.writer = 1))
       end
+
+      def test_class_method
+        assert_equal(7, Basic.add_as_class_method(3, 4), 'it can add integer values')
+      end
+
+      def test_class_method_raises
+        assert_raises(TypeError, 'it cannot add strings') { Basic.add_as_class_method('a', 'b') }
+      end
     end
   end
 end

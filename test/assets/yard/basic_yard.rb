@@ -108,6 +108,13 @@ module Yard
         def writer=(value)
           value.to_s
         end
+
+        # @param lhs [Integer]
+        # @param rhs [Integer]
+        # @return [Integer]
+        def self.add_as_class_method(lhs, rhs)
+          lhs + rhs
+        end
       end
     end
   end
