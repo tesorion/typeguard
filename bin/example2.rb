@@ -84,6 +84,13 @@ class Fix
   def simple(a, b = 3, c:, d: 1)
     a + b + c + d
   end
+
+  # @param base [Integer]
+  # @param arr [Array<Integer>]
+  # @return [Integer]
+  def self.splat_arg(base, *arr)
+    arr.sum(base)
+  end
 end
 
 Yard.configure do |config|
@@ -112,3 +119,4 @@ f.kwargs_arg(subject: 'subj', body: 'b')
 f.mixed_keyword_arg(1, 2, lhs: 3, rhs: 4, a: 1, b: 2, c: 3, d: 4)
 f.optional_hash(Hash[b: 1], a: 1)
 f.optional_hash({}, a: 1)
+Fix.splat_arg(10, 1, 3)

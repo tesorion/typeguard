@@ -43,9 +43,10 @@ module Yard
         block_params = p_names.map(&:first).join(', ')
         call_args = p_names.map(&:last).join(', ')
         locals = method.parameters.map(&:last).join(', ')
+        redefinition = sig.scope == :class ? 'define_singleton_method' : 'define_method'
         if return_validator
           mod.module_eval <<~RUBY, __FILE__, __LINE__ + 1
-            define_method(sig.name) do |#{block_params}|
+            #{redefinition}(sig.name) do |#{block_params}|
               zipped_params.zip([#{locals}]).each do |(mp, sp, validator), local|
                 next if validator.valid?(local)
 
@@ -60,7 +61,7 @@ module Yard
           RUBY
         else
           mod.module_eval <<~RUBY, __FILE__, __LINE__ + 1
-            define_method(sig.name) do |#{block_params}|
+            #{redefinition}(sig.name) do |#{block_params}|
               zipped_params.zip([#{locals}]).each do |(mp, sp, validator), local|
                 next if validator.valid?(local)
 
