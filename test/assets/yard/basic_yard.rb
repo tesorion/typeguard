@@ -109,6 +109,13 @@ module Yard
           value.to_s
         end
 
+        # @param lhs
+        # @param rhs
+        # @return the sum of lhs and rhs
+        def document_without_types(lhs, rhs)
+          lhs + rhs
+        end
+
         # @param lhs [Integer]
         # @param rhs [Integer]
         # @return [Integer]
