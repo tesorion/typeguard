@@ -204,7 +204,7 @@ module Yard
         end
 
         def build_types_string(tag)
-          tag.respond_to?(:types) ? tag.types.join(' or ') : []
+          tag.respond_to?(:types) && !tag.types.nil? ? tag.types.join(' or ') : []
         end
 
         def build_symbol
