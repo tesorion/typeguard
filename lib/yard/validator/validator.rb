@@ -25,12 +25,12 @@ module Yard
         zipped_params.map do |(type, name), sp, _|
           name = name.to_s
           case type
-          when :req     then [name, name]                                   # foo
-          when :keyreq  then ["#{name}:", "#{name}: #{name}"]               # foo:
-          when :rest    then ["*#{name}", "*#{name}"]                       # *foo
-          when :keyrest then ["**#{name}", "**#{name}"]                     # **foo
-          when :key     then ["#{name}: #{sp.default}", "#{name}: #{name}"] # foo: bar
-          when :opt     then ["#{name} = #{sp.default}", name]              # foo = bar
+          when :req     then [name, name]                                    # foo
+          when :keyreq  then ["#{name}:", "#{name}: #{name}"]                # foo:
+          when :rest    then ["*#{name}", "*#{name}"]                        # *foo
+          when :keyrest then ["**#{name}", "**#{name}"]                      # **foo
+          when :key     then ["#{name}: #{sp&.default}", "#{name}: #{name}"] # foo: bar
+          when :opt     then ["#{name} = #{sp&.default}", name]              # foo = bar
           else raise
           end
         end
