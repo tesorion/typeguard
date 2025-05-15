@@ -116,6 +116,10 @@ module Yard
           lhs + rhs
         end
 
+        def add_without_yardoc(lhs, rhs)
+          lhs + rhs
+        end
+
         # @param lhs [Integer]
         # @param rhs [Integer]
         # @return [Integer]

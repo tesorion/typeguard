@@ -132,6 +132,11 @@ module Yard
         assert_equal('ab', Basic.new.document_without_types('a', 'b'), 'it supports arguments without types')
       end
 
+      def test_add_without_yardoc
+        assert_equal(7, Basic.new.add_without_yardoc(3, 4), 'it supports arguments without yardoc')
+        assert_equal('ab', Basic.new.add_without_yardoc('a', 'b'), 'it supports arguments without yardoc')
+      end
+
       def test_class_method
         assert_equal(7, Basic.add_as_class_method(3, 4), 'it can add integer values')
       end
