@@ -137,6 +137,16 @@ module Yard
         assert_equal('ab', Basic.new.add_without_yardoc('a', 'b'), 'it supports arguments without yardoc')
       end
 
+      def test_add_with_partial_yardoc
+        assert_equal(7, Basic.new.add_with_partial_yardoc(3, 4), 'it supports arguments with partial yardoc')
+        assert_raises(TypeError, 'it checks typed parameters') { Basic.add_as_class_method(3, 4.0) }
+      end
+
+      def test_add_with_return_yardoc
+        assert_equal(7, Basic.new.add_with_partial_yardoc(3, 4), 'it supports arguments without yardoc')
+        assert_raises(TypeError, 'it checks typed return') { Basic.add_as_class_method('a', 'b') }
+      end
+
       def test_class_method
         assert_equal(7, Basic.add_as_class_method(3, 4), 'it can add integer values')
       end

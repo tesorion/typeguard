@@ -15,7 +15,7 @@ module Yard
       def self.zip_params(method_params, sig_params)
         method_params.map do |mp|
           sig_param = sig_params.find { |sp| sp.name == mp.last }
-          validator = param_validator(sig_param.types)
+          validator = param_validator(sig_param.types) if sig_param
           [mp, sig_param, validator]
         end
       end
@@ -48,7 +48,7 @@ module Yard
           mod.module_eval <<~RUBY, __FILE__, __LINE__ + 1
             #{redefinition}(sig.name) do |#{block_params}|
               zipped_params.zip([#{locals}]).each do |(mp, sp, validator), local|
-                next if validator.valid?(local)
+                next if validator.nil? || validator.valid?(local)
 
                 Metrics.report_unexpected_argument(sig, sp.types_string, local, mod.name, sp)
               end
@@ -63,7 +63,7 @@ module Yard
           mod.module_eval <<~RUBY, __FILE__, __LINE__ + 1
             #{redefinition}(sig.name) do |#{block_params}|
               zipped_params.zip([#{locals}]).each do |(mp, sp, validator), local|
-                next if validator.valid?(local)
+                next if validator.nil? || validator.valid?(local)
 
                 Metrics.report_unexpected_argument(sig, sp.types_string, local, mod.name, sp)
               end

@@ -120,6 +120,16 @@ module Yard
           lhs + rhs
         end
 
+        # @param rhs [Integer]
+        def add_with_partial_yardoc(lhs, rhs)
+          lhs + rhs
+        end
+
+        # @return [Integer]
+        def add_with_return_yardoc(lhs, rhs)
+          lhs + rhs
+        end
+
         # @param lhs [Integer]
         # @param rhs [Integer]
         # @return [Integer]
