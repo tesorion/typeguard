@@ -120,6 +120,10 @@ module Yard
           lhs + rhs
         end
 
+        def block_without_yardoc(&block)
+          block.call(123)
+        end
+
         # @param rhs [Integer]
         def add_with_partial_yardoc(lhs, rhs)
           lhs + rhs
