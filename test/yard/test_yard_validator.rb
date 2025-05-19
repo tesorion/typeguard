@@ -137,6 +137,17 @@ module Yard
         assert_equal('ab', Basic.new.add_without_yardoc('a', 'b'), 'it supports arguments without yardoc')
       end
 
+      def test_add_optional_without_yardoc
+        assert_equal(4, Basic.new.add_optional_without_yardoc(3), 'it supports defaults without yardoc')
+        assert_equal(5, Basic.new.add_optional_without_yardoc(3, 2), 'it supports defaults without yardoc')
+      end
+
+      def test_nil_optional
+        assert_equal([nil, 'nil'], Basic.new.nil_optional, 'it supports nil defaults')
+        assert_equal([nil, '1'], Basic.new.nil_optional(nil&.!, '1'), 'it supports nil default arguments')
+        assert_raises(TypeError, 'it checks typed default nil') { Basic.new.nil_optional(1) }
+      end
+
       def test_block_without_yardoc
         assert_equal(444, Basic.new.block_without_yardoc { |i| 321 + i }, 'it supports blocks without yardoc')
         assert_equal('123', Basic.new.block_without_yardoc(&:to_s), 'it supports blocks without yardoc')

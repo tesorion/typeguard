@@ -21,7 +21,6 @@ module Yard
       end
 
       def self.param_names(zipped_params)
-        # TODO: for defaults, ensure nil != "nil" from YARD
         # Tuples of [parameter, invocation] names
         zipped_params.map do |(type, name), sp, _|
           name = name.to_s

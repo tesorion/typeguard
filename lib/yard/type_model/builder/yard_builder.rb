@@ -89,19 +89,32 @@ module Yard
             hash[index].last << value
           end
 
-          ps = object.parameters
+          ps = object.parameters.dup
           parameters = object.tags(:param).map do |tag|
-            p_name, p_default = ps.find { |name, _| name.gsub(/[*:]/, '') == tag.name }
-            next unless p_name
+            param = ps.find { |name, _| name.gsub(/[*:]/, '') == tag.name }
+            next unless param
 
+            ps.delete(param)
             bound_children = unbound_children.delete(tag.name)
             ParameterDefinition.new(
               name: tag.name.to_sym,
               source: "#{object.file}:#{object.line}",
-              default: p_default,
+              default: param.last,
               types: bound_children ? [build_fixed_hash(bound_children)] : build_types(tag),
               types_string: build_types_string(tag)
             )
+          end
+
+          untyped_defaults = ps.reject { |_, default| default.nil? }
+          untyped_defaults.each do |name, default|
+            parameter = ParameterDefinition.new(
+              name: name.to_sym,
+              source: "#{object.file}:#{object.line}",
+              default: default,
+              types: build_types(nil),
+              types_string: build_types_string(nil)
+            )
+            parameters << parameter
           end
 
           unbound_children.each do |k, v|

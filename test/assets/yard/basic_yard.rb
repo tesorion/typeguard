@@ -50,6 +50,13 @@ module Yard
           lhs + rhs
         end
 
+        # @param foo [nil]
+        # @param bar [String]
+        # @return [(NilClass, String)]
+        def nil_optional(foo = nil, bar = 'nil')
+          [foo, bar]
+        end
+
         # @param lhs [Integer]
         # @param rhs [Integer]
         # @return [Integer]
@@ -117,6 +124,10 @@ module Yard
         end
 
         def add_without_yardoc(lhs, rhs)
+          lhs + rhs
+        end
+
+        def add_optional_without_yardoc(lhs, rhs = 1)
           lhs + rhs
         end
 
