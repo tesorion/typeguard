@@ -58,6 +58,10 @@ module Yard
         assert_equal(3, Basic.new.add_with_keyword_arguments_with_default(lhs: 2))
       end
 
+      def test_add_with_keyword_arguments_with_default_without_doc
+        assert_equal(3, Basic.new.add_with_keyword_arguments_with_default_without_doc(lhs: 2))
+      end
+
       def test_total_works_with_integer_array
         assert_equal(10, Basic.new.total([3, 3, 4]), 'it can add integer arrays')
       end

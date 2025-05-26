@@ -71,6 +71,10 @@ module Yard
           lhs + rhs
         end
 
+        def add_with_keyword_arguments_with_default_without_doc(lhs:, rhs: 1)
+          lhs + rhs
+        end
+
         # @param arr [Array<Integer>] array of integers
         # @return [Integer] sum of array
         def total(arr)
