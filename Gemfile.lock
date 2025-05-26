@@ -4,7 +4,7 @@ PATH
     yard-validator (0.1.0)
       dry-configurable
       rbs
-      sqlite3
+      sqlite3 (~> 2.6)
       yard
       zeitwerk (~> 2.6.0)
 
