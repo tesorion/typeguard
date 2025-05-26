@@ -15,7 +15,9 @@ module Yard
           @definitions.each do |definition|
             resolve_definition(definition)
           rescue NameError => e
-            raise(e.class, Metrics.report(Object, definition, :unresolved, e.message), [])
+            raise(e.class,
+                  Metrics.format_log(Metrics.report(Object, definition, :unresolved, 'resolution', e.message)),
+                  [])
           end
         else
           # Create compact array of resolved definitions
@@ -53,7 +55,7 @@ module Yard
           end
           false
         rescue NameError => e
-          Metrics.report(parent, definition, :unresolved, e)
+          Metrics.report(parent, definition, :unresolved, 'resolution', e)
           true
         end
       end

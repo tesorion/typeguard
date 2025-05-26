@@ -57,9 +57,8 @@ module Yard
         actual_arity = original_method.parameters.count
         return if expected_arity == actual_arity
 
-        error = "Expected arity of '#{expected_arity}' but received '#{actual_arity}'."
-        full_message = Metrics.report(mod, sig, :unexpected_arity, error)
-        raise full_message if @config.raise_on_unexpected_arity
+        log = Metrics.report(mod, sig, :unexpected_arity, expected_arity, actual_arity)
+        raise Metrics.format_log(log) if @config.raise_on_unexpected_arity
       end
 
       def check_visibility(target, mod, sig, method_name)
@@ -75,7 +74,7 @@ module Yard
             :public
           end
 
-        error = nil
+        error = false
         unless expected_visibility == actual_visibility
           if expected_visibility == :public && actual_visibility == :private
             if sig.name == :initialize
@@ -83,16 +82,16 @@ module Yard
             elsif mod == Object
               # Methods on Object (root) are private by default, ignore
             else
-              error = 'Expected visibility of public but received private.'
+              error = true
             end
           else
-            error = "Expected visibility of '#{expected_visibility}' but received '#{actual_visibility}'."
+            error = true
           end
         end
 
         if error
-          full_message = Metrics.report(mod, sig, :unexpected_visibility, error)
-          raise full_message if @config.raise_on_unexpected_visibility
+          log = Metrics.report(mod, sig, :unexpected_visibility, expected_visibility, actual_visibility)
+          raise Metrics.format_log(log) if @config.raise_on_unexpected_visibility
         end
 
         actual_visibility

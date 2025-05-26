@@ -2,7 +2,7 @@
 
 module Yard
   module Metrics
-    Log = Struct.new(:module, :definition, :type, :error, :message, :source)
+    Log = Struct.new(:module, :definition, :type, :error, :expected, :actual, :source, :caller, keyword_init: true)
 
     @raise_on_unexpected_argument = false
     @raise_on_unexpected_return = false
@@ -13,33 +13,45 @@ module Yard
       @raise_on_unexpected_return = validation.raise_on_unexpected_return
     end
 
+    def self.format_log(log)
+      <<~MESSAGE
+        - #{log.error.upcase} - Expected #{log.expected} for #{log.type} but received incompatible \
+        #{log.actual} in '#{log.module}##{log.definition}' defined in #{log.source} \
+        and called from #{log.caller}
+      MESSAGE
+    end
+
     def self.flush
       new_line = "\n" unless @logs.empty?
       puts "\nyard-validation errors [start]: #{@logs.length} #{new_line}\n"
-      @logs.each { |log| puts "- #{log.message}" }
+      @logs.each { |log| puts format_log(log) }
       puts "\nyard-validation errors [end]: #{@logs.length} #{new_line}"
     end
 
-    def self.report(mod, definition, error, message)
+    def self.report(mod, definition, error, expected, actual)
+      caller = caller_locations(1, 1).first
+      caller_string = caller.label.split('::').last
       module_name = mod.name.to_sym
-      type = definition.class.name.split('::').last.to_sym
+      type = definition.class.name.split('::').last.gsub('Definition', '').to_sym
       source = definition.source
-      full_message = "#{error.upcase} #{type} (#{module_name}##{definition.name} in #{source}): #{message}"
-      @logs << Log.new(module_name, definition.name, type, error, full_message, source)
-      full_message
+      log = Log.new(module: module_name, definition: definition.name, type: type, error: error,
+                    expected: expected, actual: actual, source: source,
+                    caller: caller_string)
+      @logs << log
+      log
     end
 
     def self.report_unexpected_return(sig, return_object, result, mod_name)
       caller = caller_locations(2, 1).first
       caller_string = "#{caller.path}:#{caller.lineno}"
-      name = sig.name
       source = sig.returns.source
-      msg = "UNEXPECTED_RETURN Expected #{return_object} but received incompatible #{result.class} " \
-      'from return statement ' \
-      "in method '#{mod_name}##{name}' defined in #{source} and " \
-      "called from #{caller_string}"
-      @logs << Log.new(mod_name, sig.name, :ReturnDefinition, :unexpected_return, msg, source)
-      raise TypeError, msg if @raise_on_unexpected_return
+      log = Log.new(module: mod_name, definition: sig.name, type: :Return,
+                    error: :unexpected_return, source: source, caller: caller_string,
+                    expected: return_object, actual: result.class.to_s)
+      @logs << log
+      raise TypeError, format_log(log) if @raise_on_unexpected_return
+
+      log
     end
 
     def self.report_unexpected_argument(sig, expected, actual, mod_name, parameter)
@@ -48,12 +60,11 @@ module Yard
       method_name = sig.name
       parameter_name = parameter.name
       source = parameter.source
-      msg = "UNEXPECTED_ARGUMENT Expected #{expected} but received incompatible #{actual.class} " \
-      "for parameter '#{parameter_name}' " \
-      "in method '#{mod_name}##{method_name}' defined in #{source} and " \
-      "called from #{caller_string}"
-      @logs << Log.new(mod_name, method_name, :ParameterDefinition, :unexpected_argument, msg, source)
-      raise TypeError, msg if @raise_on_unexpected_argument
+      log = Log.new(module: mod_name, definition: method_name, type: parameter_name,
+                    error: :unexpected_argument, source: source, caller: caller_string,
+                    expected: expected, actual: actual.class.to_s)
+      @logs << log
+      raise TypeError, format_log(log) if @raise_on_unexpected_argument
     end
   end
 end
