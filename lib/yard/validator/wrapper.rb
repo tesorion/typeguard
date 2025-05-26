@@ -75,7 +75,7 @@ module Yard
           end
 
         error = false
-        unless expected_visibility == actual_visibility
+        unless expected_visibility.nil? || expected_visibility == actual_visibility
           if expected_visibility == :public && actual_visibility == :private
             if sig.name == :initialize
               # Initialize is private by default, ignore
