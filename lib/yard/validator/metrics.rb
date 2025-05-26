@@ -37,12 +37,17 @@ module Yard
       db
     end
 
-    def self.upload_log(log)
-      db_log = log.to_h.transform_values(&:to_s)
-      @db.execute('INSERT INTO logs (module, definition, type, error, expected, actual, source, caller)
-                   VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
-                  [db_log[:module], db_log[:definition], db_log[:type], db_log[:error],
-                   db_log[:expected], db_log[:actual], db_log[:source], db_log[:caller]])
+    def self.upload_logs
+      statement = @db.prepare('INSERT INTO logs (module, definition, type, error, expected, actual, source, caller)
+                              VALUES (?, ?, ?, ?, ?, ?, ?, ?)')
+      @db.transaction do
+        db_logs = @logs.map { |log| log.to_h.transform_values(&:to_s) }
+        db_logs.each do |log|
+          statement.execute(log[:module], log[:definition], log[:type], log[:error],
+                            log[:expected], log[:actual], log[:source], log[:caller])
+        end
+      end
+      statement.close
     end
 
     def self.format_log(log)
@@ -58,6 +63,12 @@ module Yard
       puts "\nyard-validation errors [start]: #{@logs.length} #{new_line}\n"
       @logs.each { |log| puts format_log(log) }
       puts "\nyard-validation errors [end]: #{@logs.length} #{new_line}"
+      if @db
+        upload_logs
+        insertions = @db.total_changes
+        puts "\nyard-validation db insertions: #{insertions} #{new_line}"
+      end
+      @logs.clear
     end
 
     def self.report(mod, definition, error, expected, actual)
@@ -70,7 +81,6 @@ module Yard
                     expected: expected, actual: actual, source: source,
                     caller: caller_string)
       @logs << log
-      upload_log(log) if @db
       log
     end
 
@@ -82,7 +92,6 @@ module Yard
                     error: :unexpected_return, source: source, caller: caller_string,
                     expected: return_object, actual: result.class.to_s)
       @logs << log
-      upload_log(log) if @db
       raise TypeError, format_log(log) if @raise_on_unexpected_return
 
       log
@@ -98,7 +107,6 @@ module Yard
                     error: :unexpected_argument, source: source, caller: caller_string,
                     expected: expected, actual: actual.class.to_s)
       @logs << log
-      upload_log(log) if @db
       raise TypeError, format_log(log) if @raise_on_unexpected_argument
 
       log
