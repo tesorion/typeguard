@@ -18,6 +18,7 @@ module Yard
   setting_bool :enabled
   setting_bool :reparse
   setting_bool :at_exit_report
+
   setting :target, reader: true
   setting :source, default: :yard, reader: true, constructor: proc { |value|
     raise "Config source must be one of #{SUPPORTED_SOURCES}" unless SUPPORTED_SOURCES.include?(value)
@@ -39,13 +40,15 @@ module Yard
     Yard.setting_bool self, :raise_on_unexpected_return
   end
 
+  setting :sqlite3, reader: true
+
   def self.process!
     unless config.enabled
       puts 'WARNING: yard-validator disabled'
       return
     end
 
-    Yard::Metrics.config(config.validation)
+    Yard::Metrics.config(config.validation, config.sqlite3)
     Yard::TypeModel::Builder.send(config.source)
     builder = TypeModel::Builder::IMPLEMENTATION.new(config.target, config.reparse)
     definitions = builder.build

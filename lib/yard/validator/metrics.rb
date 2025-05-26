@@ -6,11 +6,43 @@ module Yard
 
     @raise_on_unexpected_argument = false
     @raise_on_unexpected_return = false
+    @db = nil
     @logs = []
 
-    def self.config(validation)
+    def self.config(validation, sqlite3)
       @raise_on_unexpected_argument = validation.raise_on_unexpected_argument
       @raise_on_unexpected_return = validation.raise_on_unexpected_return
+      @db = configure_db(sqlite3)
+    end
+
+    def self.configure_db(sqlite3)
+      return if sqlite3.nil?
+
+      require 'sqlite3'
+      db = SQLite3::Database.new(sqlite3)
+      db.execute <<~SQL
+        CREATE TABLE IF NOT EXISTS logs (
+          id INTEGER PRIMARY KEY,
+          time INTEGER DEFAULT (unixepoch()),
+          module TEXT,
+          definition TEXT,
+          type TEXT,
+          error TEXT,
+          expected TEXT,
+          actual TEXT,
+          source TEXT,
+          caller TEXT
+        );
+      SQL
+      db
+    end
+
+    def self.upload_log(log)
+      db_log = log.to_h.transform_values(&:to_s)
+      @db.execute('INSERT INTO logs (module, definition, type, error, expected, actual, source, caller)
+                   VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+                  [db_log[:module], db_log[:definition], db_log[:type], db_log[:error],
+                   db_log[:expected], db_log[:actual], db_log[:source], db_log[:caller]])
     end
 
     def self.format_log(log)
@@ -38,6 +70,7 @@ module Yard
                     expected: expected, actual: actual, source: source,
                     caller: caller_string)
       @logs << log
+      upload_log(log) if @db
       log
     end
 
@@ -49,6 +82,7 @@ module Yard
                     error: :unexpected_return, source: source, caller: caller_string,
                     expected: return_object, actual: result.class.to_s)
       @logs << log
+      upload_log(log) if @db
       raise TypeError, format_log(log) if @raise_on_unexpected_return
 
       log
@@ -64,7 +98,10 @@ module Yard
                     error: :unexpected_argument, source: source, caller: caller_string,
                     expected: expected, actual: actual.class.to_s)
       @logs << log
+      upload_log(log) if @db
       raise TypeError, format_log(log) if @raise_on_unexpected_argument
+
+      log
     end
   end
 end
