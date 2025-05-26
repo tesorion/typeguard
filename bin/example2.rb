@@ -77,7 +77,7 @@ class Fix
   end
 
   # @param a [Integer]
-  # @param b [Integer]
+  # @param b [Integeer]
   # @param c [Integer]
   # @param d [Integer]
   # @return [Integer]
@@ -85,7 +85,9 @@ class Fix
     a + b + c + d
   end
 
-  # @param base [Integer]
+  protected
+
+  ##  @param base [Integer]
   # @param arr [Array<Integer>]
   # @return [Integer]
   def self.splat_arg(base, *arr)
@@ -120,4 +122,4 @@ f.kwargs_arg(subject: 'subj', body: 'b')
 f.mixed_keyword_arg(1, 2, lhs: 3, rhs: 4, a: 1, b: 2, c: 3, d: 4)
 f.optional_hash(Hash[b: 1], a: 1)
 f.optional_hash({}, a: 1)
-Fix.splat_arg(10, 1, 3)
+Fix.splat_arg(10, 1, 3.0)
