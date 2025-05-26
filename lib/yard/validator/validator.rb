@@ -14,7 +14,7 @@ module Yard
 
       def self.zip_params(method_params, sig_params)
         method_params.map do |mp|
-          sig_param = sig_params.find { |sp| sp.name == mp.last }
+          sig_param = sig_params.find { |sp| sp.name.to_s.gsub(/[*:]/, '').to_sym == mp.last }
           validator = param_validator(sig_param.types) if sig_param
           [mp, sig_param, validator]
         end
