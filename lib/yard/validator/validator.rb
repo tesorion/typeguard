@@ -27,11 +27,11 @@ module Yard
           case type
           when :req     then [name, name]                                     # foo
           when :keyreq  then ["#{name}:", "#{name}: #{name}"]                 # foo:
-          when :rest    then ["*#{name}", "*#{name}"]                         # *foo
-          when :keyrest then ["**#{name}", "**#{name}"]                       # **foo
-          when :key     then ["#{name}: (#{sp.default})", "#{name}: #{name}"] # foo: (bar)
+          when :keyrest then [name == '**' ? name : "**#{name}"] * 2          # **foo
+          when :rest    then [name == '*' ? name : "*#{name}"] * 2            # *foo
+          when :block   then [name == '&' ? name : "&#{name}"]                # &foo
           when :opt     then ["#{name} = (#{sp.default})", name]              # foo = (bar)
-          when :block   then ["&#{name}", "&#{name}"]                         # &foo
+          when :key     then ["#{name}: (#{sp.default})", "#{name}: #{name}"] # foo: (bar)
           else raise type
           end
         end
@@ -42,8 +42,8 @@ module Yard
         return_validator = (param_validator(sig.returns.types) if sig.returns && !sig.returns.types.empty?)
         p_names = param_names(zipped_params)
         block_params = p_names.map(&:first).join(', ')
-        call_args = p_names.map(&:last).join(', ')
-        locals = method.parameters.map(&:last).join(', ')
+        call_args = p_names.map(&:last).reject { |s| ['*', '**', '&'].include?(s) }.join(', ')
+        locals = method.parameters.map { |s| ['*', '**', '&'].include?(s.last.to_s) ? nil : s.last }.compact.join(', ')
         redefinition = sig.scope == :class ? 'define_singleton_method' : 'define_method'
         if return_validator
           mod.module_eval <<~RUBY, __FILE__, __LINE__ + 1
