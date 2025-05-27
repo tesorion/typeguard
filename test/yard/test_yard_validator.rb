@@ -151,6 +151,18 @@ module Yard
         assert_equal(5, Basic.new.add_optional_expression_without_yardoc(3, 2), 'it supports default expressions without yardoc')
       end
 
+      def test_test_add_rest_args
+        assert_equal(7, Basic.new.test_add_rest_args(3, 4, 5, 6, 7))
+      end
+
+      def test_test_add_rest_keywords
+        assert_equal(7, Basic.new.test_add_rest_keywords(3, 4, foo: 1, bar: 'baz'))
+      end
+
+      def test_test_add_rest_block
+        assert_equal(7, Basic.new.test_add_rest_block(3, 4) { raise 'Unused block' })
+      end
+
       def test_add_optional_parentheses_expression_without_yardoc
         assert_equal(7, Basic.new.add_optional_parentheses_expression_without_yardoc(3), 'it supports default expressions without yardoc')
         assert_equal(5, Basic.new.add_optional_parentheses_expression_without_yardoc(3, 2), 'it supports default expressions without yardoc')

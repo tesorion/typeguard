@@ -139,6 +139,27 @@ module Yard
           lhs + rhs
         end
 
+        # @param lhs [Integer]
+        # @param rhs [Integer]
+        # @return [Integer]
+        def test_add_rest_args(lhs, rhs, *)
+          lhs + rhs
+        end
+
+        # @param lhs [Integer]
+        # @param rhs [Integer]
+        # @return [Integer]
+        def test_add_rest_keywords(lhs, rhs, **)
+          lhs + rhs
+        end
+
+        # @param lhs [Integer]
+        # @param rhs [Integer]
+        # @return [Integer]
+        def test_add_rest_block(lhs, rhs, &)
+          lhs + rhs
+        end
+
         def add_optional_parentheses_expression_without_yardoc(lhs, rhs = (; lhs + 1))
           lhs + rhs
         end
