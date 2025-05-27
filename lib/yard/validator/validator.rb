@@ -42,10 +42,8 @@ module Yard
         return_validator = (param_validator(sig.returns.types) if sig.returns && !sig.returns.types.empty?)
         p_names = param_names(zipped_params)
         block_params = p_names.map(&:first).join(', ')
-        call_args = p_names.map(&:last).reject { |s| ['*', '**', '&'].include?(s) }
-        call_args = call_args.join(', ')
-        locals = method.parameters.map { |s| ['*', '**', '&'].include?(s.last.to_s) ? nil : s.last }
-        locals = locals.compact.join(', ')
+        call_args = p_names.map(&:last).reject { |s| ['*', '**', '&'].include?(s) }.join(', ')
+        locals = method.parameters.map { |s| ['*', '**', '&'].include?(s.last.to_s) ? nil : s.last }.compact.join(', ')
         redefinition = sig.scope == :class ? 'define_singleton_method' : 'define_method'
         if return_validator
           mod.module_eval <<~RUBY, __FILE__, __LINE__ + 1
