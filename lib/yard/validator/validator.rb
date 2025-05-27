@@ -29,7 +29,7 @@ module Yard
           when :keyreq  then ["#{name}:", "#{name}: #{name}"]                 # foo:
           when :keyrest then [name == '**' ? name : "**#{name}"] * 2          # **foo
           when :rest    then [name == '*' ? name : "*#{name}"] * 2            # *foo
-          when :block   then [name == '&' ? name : "&#{name}"]                # &foo
+          when :block   then [name == '&' ? name : "&#{name}"] * 2            # &foo
           when :opt     then ["#{name} = (#{sp.default})", name]              # foo = (bar)
           when :key     then ["#{name}: (#{sp.default})", "#{name}: #{name}"] # foo: (bar)
           else raise type
