@@ -135,6 +135,14 @@ module Yard
           lhs + rhs
         end
 
+        def add_optional_expression_without_yardoc(lhs, rhs = lhs + 1)
+          lhs + rhs
+        end
+
+        def add_optional_parentheses_expression_without_yardoc(lhs, rhs = (; lhs + 1))
+          lhs + rhs
+        end
+
         def block_without_yardoc(&block)
           block.call(123)
         end

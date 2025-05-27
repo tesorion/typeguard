@@ -146,6 +146,16 @@ module Yard
         assert_equal(5, Basic.new.add_optional_without_yardoc(3, 2), 'it supports defaults without yardoc')
       end
 
+      def test_add_optional_expression_without_yardoc
+        assert_equal(7, Basic.new.add_optional_expression_without_yardoc(3), 'it supports default expressions without yardoc')
+        assert_equal(5, Basic.new.add_optional_expression_without_yardoc(3, 2), 'it supports default expressions without yardoc')
+      end
+
+      def test_add_optional_parentheses_expression_without_yardoc
+        assert_equal(7, Basic.new.add_optional_parentheses_expression_without_yardoc(3), 'it supports default expressions without yardoc')
+        assert_equal(5, Basic.new.add_optional_parentheses_expression_without_yardoc(3, 2), 'it supports default expressions without yardoc')
+      end
+
       def test_nil_optional
         assert_equal([nil, 'nil'], Basic.new.nil_optional, 'it supports nil defaults')
         assert_equal([nil, '1'], Basic.new.nil_optional(nil&.!, '1'), 'it supports nil default arguments')
