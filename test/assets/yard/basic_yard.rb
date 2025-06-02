@@ -47,7 +47,7 @@ module Yard
         # @param lhs [Integer]
         # @param rhs [Integer]
         # @return [Integer]
-        def add_with_nokwsplat(lhs, rhs, **nil)
+        def add_with_nokwsplat_argument(lhs, rhs, **nil)
           lhs + rhs
         end
 

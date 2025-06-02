@@ -32,7 +32,8 @@ module Yard
           when :block   then [name == '&' ? name : "&#{name}"] * 2                # &foo
           when :opt     then ["#{name} = (#{sp.default})", name]                  # foo = (bar)
           when :key     then ["#{name}: (#{sp.default})", "#{name}: #{name}"]     # foo: (bar)
-          else raise type
+          when :nokey   then ['**nil'] * 2                                        # **foo
+          else raise type.to_s
           end
         end
       end
