@@ -41,6 +41,14 @@ module Yard
         assert_equal(16, Basic.new.add_with_splat_argument(10, 1, 2, 3))
       end
 
+      def test_add_with_kwsplat_argument
+        assert_equal(7, Basic.new.add_with_kwsplat_argument(lhs: 3, rhs: 4))
+      end
+
+      def test_add_with_nokwsplat_argument
+        assert_equal(7, Basic.new.add_with_nokwsplat_argument(3, 4))
+      end
+
       def test_add_with_optional_argument
         assert_equal(3, Basic.new.add_with_optional_argument(1, 2))
         assert_equal(3.0, Basic.new.add_with_optional_argument(2))

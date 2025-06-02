@@ -36,6 +36,21 @@ module Yard
           arr.sum(base)
         end
 
+        # @param [Hash] kwargs
+        # @option kwargs [Integer] :lhs
+        # @option kwargs [Integer] :rhs
+        # @return [Integer]
+        def add_with_kwsplat_argument(**kwargs)
+          kwargs.fetch(:lhs) + kwargs.fetch(:rhs)
+        end
+
+        # @param lhs [Integer]
+        # @param rhs [Integer]
+        # @return [Integer]
+        def add_with_nokwsplat(lhs, rhs, **nil)
+          lhs + rhs
+        end
+
         # @param lhs [Integer]
         # @param rhs [Integer]
         # @return [Integer]
