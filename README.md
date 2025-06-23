@@ -1,8 +1,6 @@
 # Yard::Validator
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/yard/validator`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+Runtime type checking for Ruby type signatures. Currently supports YARD and a subset of RBS.
 
 ## Installation
 
@@ -15,9 +13,25 @@ If bundler is not being used to manage dependencies, install the gem by executin
     $ gem install yard-validator
 
 ## Usage
+Call `configure` and `process!` at the end of the original code to add type checking to it.
 
-TODO: Write usage instructions here
+```ruby
+require 'yard-validator'
 
+Yard.configure do |config|
+  config.enabled = true                                  # does nothing if false
+  config.source = :yard                                  # :yard or :rbs
+  config.target = ['bin/example.rb']                     # signatures file/dir
+  config.reparse = true                                  # reparse YARD sigs
+  config.at_exit_report = true                           # print findings
+  config.sqlite3 = 'test.db'                             # store findings (SQLite)
+  config.resolution.raise_on_name_error = false          # undefined constants
+  config.wrapping.raise_on_unexpected_arity = false      # amount of parameters
+  config.wrapping.raise_on_unexpected_visibility = false # scope (public/private/..)
+  config.validation.raise_on_unexpected_argument = false # type check args
+  config.validation.raise_on_unexpected_return = false   # type check return
+end.process!
+```
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
