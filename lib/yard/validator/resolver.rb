@@ -61,7 +61,6 @@ module Yard
       end
 
       # Raises a NameError if module names are not found
-      # Maybe worth caching Object.const_get lookups
       def resolve_type(node)
         case node.shape
         when :basic

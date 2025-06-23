@@ -47,9 +47,9 @@ module Yard
               children: children
             )
           when RBS::AST::Members::MethodDefinition
-            # TODO: multiple overloads not supported yet, taking first
+            # NOTE: Currently only looking at first overload and
+            # only at required positionals.
             sig = object.overloads.first.method_type.type
-            # TODO: only looking at required_positionals for now
             parameters = sig.required_positionals.map do |param|
               ParameterDefinition.new(
                 name: param.name,

@@ -4,8 +4,6 @@ module Yard
   module TypeModel
     module Builder
       IMPL_SYM = :IMPLEMENTATION
-      # NOTE: no const_defined? check for now
-
       def self.yard
         require_relative 'builder/yard_builder'
         require_relative 'mapper/yard_mapper'

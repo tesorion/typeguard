@@ -10,8 +10,7 @@ module Yard
         SPECIAL_LITERALS = %w[true false nil self void].freeze
 
         def self.parse_map(type)
-          # NOTE: This approach relies on a private YARD api to parse typestrings, where
-          # each type (node) is discernible only by class (unlike Code Objects type()).
+          # NOTE: Using private YARD API here.
           map_yard(YARD::Tags::TypesExplainer::Parser.parse(type).first)
         end
 
