@@ -62,16 +62,8 @@ GEM
     zeitwerk (2.6.18)
 
 PLATFORMS
-  aarch64-linux-gnu
-  aarch64-linux-musl
-  arm-linux-gnu
-  arm-linux-musl
-  arm64-darwin
-  x86-linux-gnu
-  x86-linux-musl
-  x86_64-darwin
-  x86_64-linux-gnu
-  x86_64-linux-musl
+  ruby
+  x86_64-linux
 
 DEPENDENCIES
   Typeguard!
