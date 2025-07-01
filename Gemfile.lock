@@ -62,7 +62,16 @@ GEM
     zeitwerk (2.6.18)
 
 PLATFORMS
-  x86_64-linux
+  aarch64-linux-gnu
+  aarch64-linux-musl
+  arm-linux-gnu
+  arm-linux-musl
+  arm64-darwin
+  x86-linux-gnu
+  x86-linux-musl
+  x86_64-darwin
+  x86_64-linux-gnu
+  x86_64-linux-musl
 
 DEPENDENCIES
   Typeguard!
@@ -72,4 +81,4 @@ DEPENDENCIES
   rubocop
 
 BUNDLED WITH
-   2.6.8
+   2.6.9
