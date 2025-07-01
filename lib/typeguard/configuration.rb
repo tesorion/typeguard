@@ -40,15 +40,13 @@ module Typeguard
     Typeguard.setting_bool self, :raise_on_unexpected_return
   end
 
-  setting :sqlite3, reader: true
-
   def self.process!
     unless config.enabled
       puts 'WARNING: typeguard disabled'
       return
     end
 
-    Typeguard::Metrics.config(config.validation, config.sqlite3)
+    Typeguard::Metrics.config(config.validation)
     Typeguard::TypeModel::Builder.send(config.source)
     builder = TypeModel::Builder::IMPLEMENTATION.new(config.target, config.reparse)
     definitions = builder.build

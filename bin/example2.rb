@@ -96,7 +96,6 @@ class Example
 end
 
 Typeguard.configure do |config|
-  config.sqlite3 = 'test.db'
   # config.source = :rbs
   # config.target = 'sig'
   config.source = :yard

@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    Typeguard (0.1.0)
+    typeguard (1.0.0)
       dry-configurable
       rbs
       yard
@@ -26,7 +26,6 @@ GEM
     language_server-protocol (3.17.0.5)
     lint_roller (1.1.0)
     logger (1.7.0)
-    mini_portile2 (2.8.9)
     minitest (5.25.5)
     parallel (1.27.0)
     parser (3.3.8.0)
@@ -62,16 +61,15 @@ GEM
     zeitwerk (2.6.18)
 
 PLATFORMS
-  ruby
   x86_64-linux
   x86_64-linux-gnu
 
 DEPENDENCIES
-  Typeguard!
   bundler-audit
   minitest (~> 5.0)
   rake (~> 13.0)
   rubocop
+  typeguard!
 
 BUNDLED WITH
    2.6.9

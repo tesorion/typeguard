@@ -24,7 +24,6 @@ Typeguard.configure do |config|
   config.target = ['bin/example.rb']                     # signatures file/dir
   config.reparse = true                                  # reparse YARD sigs
   config.at_exit_report = true                           # print findings
-  config.sqlite3 = 'test.db'                             # store findings (SQLite)
   config.resolution.raise_on_name_error = false          # undefined constants
   config.wrapping.raise_on_unexpected_arity = false      # amount of parameters
   config.wrapping.raise_on_unexpected_visibility = false # scope (public/private/..)

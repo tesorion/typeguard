@@ -9,45 +9,9 @@ module Typeguard
     @db = nil
     @logs = []
 
-    def self.config(validation, sqlite3)
+    def self.config(validation)
       @raise_on_unexpected_argument = validation.raise_on_unexpected_argument
       @raise_on_unexpected_return = validation.raise_on_unexpected_return
-      @db = configure_db(sqlite3)
-    end
-
-    def self.configure_db(sqlite3)
-      return if sqlite3.nil?
-
-      require 'sqlite3'
-      db = SQLite3::Database.new(sqlite3)
-      db.execute <<~SQL
-        CREATE TABLE IF NOT EXISTS logs (
-          id INTEGER PRIMARY KEY,
-          time INTEGER DEFAULT (unixepoch()),
-          module TEXT,
-          definition TEXT,
-          type TEXT,
-          error TEXT,
-          expected TEXT,
-          actual TEXT,
-          source TEXT,
-          caller TEXT
-        );
-      SQL
-      db
-    end
-
-    def self.upload_logs
-      statement = @db.prepare('INSERT INTO logs (module, definition, type, error, expected, actual, source, caller)
-                              VALUES (?, ?, ?, ?, ?, ?, ?, ?)')
-      @db.transaction do
-        db_logs = @logs.map { |log| log.to_h.transform_values(&:to_s) }
-        db_logs.each do |log|
-          statement.execute(log[:module], log[:definition], log[:type], log[:error],
-                            log[:expected], log[:actual], log[:source], log[:caller])
-        end
-      end
-      statement.close
     end
 
     def self.format_log(log)

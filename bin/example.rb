@@ -96,7 +96,6 @@ end
 require_relative '../lib/typeguard'
 
 Typeguard.configure do |config|
-  config.sqlite3 = 'test.db'
   config.source = :rbs
   config.target = 'sig'
   # config.source = :yard
