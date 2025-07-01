@@ -27,7 +27,6 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'dry-configurable'
   spec.add_dependency 'rbs'
-  spec.add_dependency 'sqlite3', '~> 2.6'
   spec.add_dependency 'yard'
   spec.add_dependency 'zeitwerk', '~> 2.6.0'
 

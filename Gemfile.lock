@@ -4,7 +4,6 @@ PATH
     Typeguard (0.1.0)
       dry-configurable
       rbs
-      sqlite3 (~> 2.6)
       yard
       zeitwerk (~> 2.6.0)
 
@@ -62,8 +61,16 @@ GEM
     zeitwerk (2.6.18)
 
 PLATFORMS
-  ruby
-  x86_64-linux
+  aarch64-linux-gnu
+  aarch64-linux-musl
+  arm-linux-gnu
+  arm-linux-musl
+  arm64-darwin
+  x86-linux-gnu
+  x86-linux-musl
+  x86_64-darwin
+  x86_64-linux-gnu
+  x86_64-linux-musl
 
 DEPENDENCIES
   Typeguard!
