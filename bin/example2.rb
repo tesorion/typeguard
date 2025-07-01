@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative '../lib/typeguard/validator'
+require_relative '../lib/typeguard'
 
 # rubocop:disable all
 

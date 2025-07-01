@@ -1,4 +1,4 @@
-# Typeguard::Validator
+# Typeguard
 
 Runtime type checking for Ruby type signatures. Currently supports YARD and a subset of RBS.
 

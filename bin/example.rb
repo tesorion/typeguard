@@ -93,7 +93,7 @@ class Example
   end
 end
 
-require_relative '../lib/typeguard/validator'
+require_relative '../lib/typeguard'
 
 Typeguard.configure do |config|
   config.sqlite3 = 'test.db'

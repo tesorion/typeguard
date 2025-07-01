@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require_relative 'lib/typeguard/validator/version'
+require_relative 'lib/typeguard/version'
 
 Gem::Specification.new do |spec|
   spec.name = 'Typeguard'
-  spec.version = Typeguard::Validator::VERSION
+  spec.version = Typeguard::VERSION
   spec.authors = ['Tesorion']
   spec.email = ['QmanageDevelopment@tesorion.nl']
 

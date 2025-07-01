@@ -22,7 +22,7 @@ module Typeguard
       end.process!
 
       def test_that_it_has_a_version_number
-        refute_nil(::Typeguard::Validator::VERSION)
+        refute_nil(::Typeguard::VERSION)
       end
 
       def test_add_works_with_integers

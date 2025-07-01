@@ -16,7 +16,7 @@ Lint/BooleanSymbol:
 # Configuration parameters: AllowedParentClasses.
 Lint/MissingSuper:
   Exclude:
-    - 'lib/typeguard/validator/types.rb'
+    - 'lib/typeguard/types.rb'
 
 # Offense count: 1
 # This cop supports safe autocorrection (--autocorrect).
@@ -24,7 +24,7 @@ Lint/MissingSuper:
 # NotImplementedExceptions: NotImplementedError
 Lint/UnusedMethodArgument:
   Exclude:
-    - 'lib/typeguard/validator/types.rb'
+    - 'lib/typeguard/types.rb'
 
 # Offense count: 8
 # Configuration parameters: CountKeywordArgs, MaxOptionalParameters.
@@ -37,7 +37,7 @@ Metrics/ParameterLists:
 Naming/MethodParameterName:
   Exclude:
     - 'lib/typeguard/type_model/parser.rb'
-    - 'lib/typeguard/validator/example.rb'
+    - 'lib/typeguard/example.rb'
 
 # Offense count: 7
 # This cop supports unsafe autocorrection (--autocorrect-all).
@@ -46,7 +46,7 @@ Naming/MethodParameterName:
 Style/ClassAndModuleChildren:
   Exclude:
     - 'lib/typeguard/validator.rb'
-    - 'lib/typeguard/validator/main.rb'
+    - 'lib/typeguard/main.rb'
 
 # Offense count: 34
 # Configuration parameters: AllowedConstants.
@@ -58,14 +58,14 @@ Style/Documentation:
     - 'lib/typeguard/type_model/definitions.rb'
     - 'lib/typeguard/type_model/parser.rb'
     - 'lib/typeguard/validator.rb'
-    - 'lib/typeguard/validator/configuration.rb'
-    - 'lib/typeguard/validator/example.rb'
-    - 'lib/typeguard/validator/main.rb'
-    - 'lib/typeguard/validator/metrics.rb'
-    - 'lib/typeguard/validator/resolver.rb'
-    - 'lib/typeguard/validator/types.rb'
-    - 'lib/typeguard/validator/validator.rb'
-    - 'lib/typeguard/validator/wrapper.rb'
+    - 'lib/typeguard/configuration.rb'
+    - 'lib/typeguard/example.rb'
+    - 'lib/typeguard/main.rb'
+    - 'lib/typeguard/metrics.rb'
+    - 'lib/typeguard/resolver.rb'
+    - 'lib/typeguard/types.rb'
+    - 'lib/typeguard/validator.rb'
+    - 'lib/typeguard/wrapper.rb'
 
 # Offense count: 2
 # This cop supports safe autocorrection (--autocorrect).
@@ -79,7 +79,7 @@ Style/EmptyMethod:
 # This cop supports safe autocorrection (--autocorrect).
 Style/IfUnlessModifier:
   Exclude:
-    - 'lib/typeguard/validator/validator.rb'
+    - 'lib/typeguard/validator.rb'
 
 # Offense count: 2
 # This cop supports safe autocorrection (--autocorrect).
