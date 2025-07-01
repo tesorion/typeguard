@@ -3,14 +3,14 @@
 require 'test_helper'
 require_relative '../assets/rbs/basic_rbs'
 
-module Yard
+module Typeguard
   module Test
     class RBSValidator < Minitest::Test
-      include Yard::Test::RBSTest
-      include Yard::Test::RBSTest::NestedOnce
-      include Yard::Test::RBSTest::NestedOnce::NestedTwice
+      include Typeguard::Test::RBSTest
+      include Typeguard::Test::RBSTest::NestedOnce
+      include Typeguard::Test::RBSTest::NestedOnce::NestedTwice
 
-      Yard.configure do |config|
+      Typeguard.configure do |config|
         config.enabled = true
         config.source = :rbs
         config.target = 'test/assets/rbs'
@@ -22,7 +22,7 @@ module Yard
       end.process!
 
       def test_that_it_has_a_version_number
-        refute_nil(::Yard::Validator::VERSION)
+        refute_nil(::Typeguard::Validator::VERSION)
       end
 
       def test_add_works_with_integers

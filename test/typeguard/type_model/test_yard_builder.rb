@@ -2,23 +2,23 @@
 
 require 'test_helper'
 require 'yard'
-require 'yard/type_model/builder/yard_builder'
+require 'typeguard/type_model/builder/yard_builder'
 
-module Yard
+module Typeguard
   module Test
     class YardBuilderTest < Minitest::Test
-      include Yard::TypeModel::Definitions
-      include Yard::TypeModel::Builder
+      include Typeguard::TypeModel::Definitions
+      include Typeguard::TypeModel::Builder
 
       def setup
         @test_path = 'test/assets/'
-        @builder = Yard::TypeModel::Builder::YardBuilder.new([], false)
+        @builder = Typeguard::TypeModel::Builder::YardBuilder.new([], false)
       end
 
       def new_builder(target = ['undocumented'], reparse: true)
         YARD::Registry.clear
         target = Array(target).map { |t| "#{@test_path}#{t}.rb" }
-        @builder = Yard::TypeModel::Builder::YardBuilder.new(target, reparse)
+        @builder = Typeguard::TypeModel::Builder::YardBuilder.new(target, reparse)
       end
 
       def test_builder_filled_silent

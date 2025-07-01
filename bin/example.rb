@@ -93,9 +93,9 @@ class Example
   end
 end
 
-require_relative '../lib/yard/validator'
+require_relative '../lib/typeguard/validator'
 
-Yard.configure do |config|
+Typeguard.configure do |config|
   config.sqlite3 = 'test.db'
   config.source = :rbs
   config.target = 'sig'

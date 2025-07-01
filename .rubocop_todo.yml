@@ -10,13 +10,13 @@
 # This cop supports unsafe autocorrection (--autocorrect-all).
 Lint/BooleanSymbol:
   Exclude:
-    - 'test/yard/type_model/test_parser.rb'
+    - 'test/typeguard/type_model/test_parser.rb'
 
 # Offense count: 8
 # Configuration parameters: AllowedParentClasses.
 Lint/MissingSuper:
   Exclude:
-    - 'lib/yard/validator/types.rb'
+    - 'lib/typeguard/validator/types.rb'
 
 # Offense count: 1
 # This cop supports safe autocorrection (--autocorrect).
@@ -24,7 +24,7 @@ Lint/MissingSuper:
 # NotImplementedExceptions: NotImplementedError
 Lint/UnusedMethodArgument:
   Exclude:
-    - 'lib/yard/validator/types.rb'
+    - 'lib/typeguard/validator/types.rb'
 
 # Offense count: 8
 # Configuration parameters: CountKeywordArgs, MaxOptionalParameters.
@@ -36,8 +36,8 @@ Metrics/ParameterLists:
 # AllowedNames: as, at, by, cc, db, id, if, in, io, ip, of, on, os, pp, to
 Naming/MethodParameterName:
   Exclude:
-    - 'lib/yard/type_model/parser.rb'
-    - 'lib/yard/validator/example.rb'
+    - 'lib/typeguard/type_model/parser.rb'
+    - 'lib/typeguard/validator/example.rb'
 
 # Offense count: 7
 # This cop supports unsafe autocorrection (--autocorrect-all).
@@ -45,8 +45,8 @@ Naming/MethodParameterName:
 # SupportedStyles: nested, compact
 Style/ClassAndModuleChildren:
   Exclude:
-    - 'lib/yard/validator.rb'
-    - 'lib/yard/validator/main.rb'
+    - 'lib/typeguard/validator.rb'
+    - 'lib/typeguard/validator/main.rb'
 
 # Offense count: 34
 # Configuration parameters: AllowedConstants.
@@ -54,18 +54,18 @@ Style/Documentation:
   Exclude:
     - 'spec/**/*'
     - 'test/**/*'
-    - 'lib/yard/type_model/builder.rb'
-    - 'lib/yard/type_model/definitions.rb'
-    - 'lib/yard/type_model/parser.rb'
-    - 'lib/yard/validator.rb'
-    - 'lib/yard/validator/configuration.rb'
-    - 'lib/yard/validator/example.rb'
-    - 'lib/yard/validator/main.rb'
-    - 'lib/yard/validator/metrics.rb'
-    - 'lib/yard/validator/resolver.rb'
-    - 'lib/yard/validator/types.rb'
-    - 'lib/yard/validator/validator.rb'
-    - 'lib/yard/validator/wrapper.rb'
+    - 'lib/typeguard/type_model/builder.rb'
+    - 'lib/typeguard/type_model/definitions.rb'
+    - 'lib/typeguard/type_model/parser.rb'
+    - 'lib/typeguard/validator.rb'
+    - 'lib/typeguard/validator/configuration.rb'
+    - 'lib/typeguard/validator/example.rb'
+    - 'lib/typeguard/validator/main.rb'
+    - 'lib/typeguard/validator/metrics.rb'
+    - 'lib/typeguard/validator/resolver.rb'
+    - 'lib/typeguard/validator/types.rb'
+    - 'lib/typeguard/validator/validator.rb'
+    - 'lib/typeguard/validator/wrapper.rb'
 
 # Offense count: 2
 # This cop supports safe autocorrection (--autocorrect).
@@ -73,13 +73,13 @@ Style/Documentation:
 # SupportedStyles: compact, expanded
 Style/EmptyMethod:
   Exclude:
-    - 'test/yard/test_validator.rb'
+    - 'test/typeguard/test_validator.rb'
 
 # Offense count: 6
 # This cop supports safe autocorrection (--autocorrect).
 Style/IfUnlessModifier:
   Exclude:
-    - 'lib/yard/validator/validator.rb'
+    - 'lib/typeguard/validator/validator.rb'
 
 # Offense count: 2
 # This cop supports safe autocorrection (--autocorrect).

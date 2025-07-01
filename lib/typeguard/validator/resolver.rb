@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-module Yard
+module Typeguard
   module Resolution
     class Resolver
-      include Yard::TypeModel::Definitions
+      include Typeguard::TypeModel::Definitions
 
       def initialize(definitions, config)
         @definitions = definitions

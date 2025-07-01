@@ -3,14 +3,14 @@
 require 'test_helper'
 require_relative '../assets/yard/basic_yard'
 
-module Yard
+module Typeguard
   module Test
     class YardValidator < Minitest::Test
-      include Yard::Test::YardTest
-      include Yard::Test::YardTest::NestedOnce
-      include Yard::Test::YardTest::NestedOnce::NestedTwice
+      include Typeguard::Test::YardTest
+      include Typeguard::Test::YardTest::NestedOnce
+      include Typeguard::Test::YardTest::NestedOnce::NestedTwice
 
-      Yard.configure do |config|
+      Typeguard.configure do |config|
         config.enabled = true
         config.source = :yard
         config.target = ['test/assets/yard/basic_yard.rb']
@@ -22,7 +22,7 @@ module Yard
       end.process!
 
       def test_that_it_has_a_version_number
-        refute_nil(::Yard::Validator::VERSION)
+        refute_nil(::Typeguard::Validator::VERSION)
       end
 
       def test_add_works_with_integers

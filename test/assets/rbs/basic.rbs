@@ -1,4 +1,4 @@
-module Yard
+module Typeguard
   module Test
     module RBSTest
       module NestedOnce
@@ -50,7 +50,7 @@ module Yard
         # _@param_ `klass_instance` — nested class one
         # 
         # _@return_ — array of nested classes
-        def nested_classes: (Yard::Test::RBSTest::NestedOnce::NestedClassOne klass_instance) -> [Yard::Test::RBSTest::NestedOnce::NestedClassOne, Yard::Test::RBSTest::NestedOnce::NestedTwice::NestedClassTwo]
+        def nested_classes: (Typeguard::Test::RBSTest::NestedOnce::NestedClassOne klass_instance) -> [Typeguard::Test::RBSTest::NestedOnce::NestedClassOne, Typeguard::Test::RBSTest::NestedOnce::NestedTwice::NestedClassTwo]
       end
     end
   end

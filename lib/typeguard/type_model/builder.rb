@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Yard
+module Typeguard
   module TypeModel
     module Builder
       IMPL_SYM = :IMPLEMENTATION

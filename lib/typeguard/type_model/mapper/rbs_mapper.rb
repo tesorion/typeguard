@@ -2,12 +2,12 @@
 
 require 'rbs'
 
-module Yard
+module Typeguard
   module TypeModel
     module Mapper
       # Maps RBS types to the generic type model
       class RBSMapper
-        include Yard::TypeModel::Definitions
+        include Typeguard::TypeModel::Definitions
 
         # @param type [RBS::Types::Base] an RBS type object
         # @return [TypeNode] a mapped type node in the generic model.

@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-module Yard
+module Typeguard
   module TypeModel
     module Mapper
       # Maps YARD types to the type model
       class YardMapper
-        include Yard::TypeModel::Definitions
+        include Typeguard::TypeModel::Definitions
 
         SPECIAL_LITERALS = %w[true false nil self void].freeze
 

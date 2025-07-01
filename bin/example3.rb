@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative '../lib/yard/validator'
+require_relative '../lib/typeguard/validator'
 
 # rubocop:disable all
 
@@ -39,7 +39,7 @@ module A
   end
 end
 
-Yard.configure do |config|
+Typeguard.configure do |config|
   # config.source = :rbs
   # config.target = 'sig'
   config.source = :yard

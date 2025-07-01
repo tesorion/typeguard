@@ -1,4 +1,4 @@
-# Yard::Validator
+# Typeguard::Validator
 
 Runtime type checking for Ruby type signatures. Currently supports YARD and a subset of RBS.
 
@@ -6,19 +6,19 @@ Runtime type checking for Ruby type signatures. Currently supports YARD and a su
 
 Install the gem and add to the application's Gemfile by executing:
 
-    $ bundle add yard-validator
+    $ bundle add typeguard
 
 If bundler is not being used to manage dependencies, install the gem by executing:
 
-    $ gem install yard-validator
+    $ gem install typeguard
 
 ## Usage
 Call `configure` and `process!` at the end of the original code to add type checking to it.
 
 ```ruby
-require 'yard-validator'
+require 'typeguard'
 
-Yard.configure do |config|
+Typeguard.configure do |config|
   config.enabled = true                                  # does nothing if false
   config.source = :yard                                  # :yard or :rbs
   config.target = ['bin/example.rb']                     # signatures file/dir
@@ -40,4 +40,4 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/yard-validator.
+Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/typeguard.

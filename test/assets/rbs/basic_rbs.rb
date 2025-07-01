@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Yard
+module Typeguard
   module Test
     module RBSTest
       module NestedOnce
@@ -52,8 +52,8 @@ module Yard
           pushable.push(element)
         end
 
-        # @param klass_instance [Yard::Test::RBSTest::NestedOnce::NestedClassOne] nested class one
-        # @return [(Yard::Test::RBSTest::NestedOnce::NestedClassOne, Yard::Test::RBSTest::NestedOnce::NestedTwice::NestedClassTwo)] array of nested classes
+        # @param klass_instance [Typeguard::Test::RBSTest::NestedOnce::NestedClassOne] nested class one
+        # @return [(Typeguard::Test::RBSTest::NestedOnce::NestedClassOne, Typeguard::Test::RBSTest::NestedOnce::NestedTwice::NestedClassTwo)] array of nested classes
         def nested_classes(klass_instance)
           [klass_instance, NestedOnce::NestedTwice::NestedClassTwo.new]
         end

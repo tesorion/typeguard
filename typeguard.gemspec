@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
-require_relative 'lib/yard/validator/version'
+require_relative 'lib/typeguard/validator/version'
 
 Gem::Specification.new do |spec|
-  spec.name = 'yard-validator'
-  spec.version = Yard::Validator::VERSION
+  spec.name = 'Typeguard'
+  spec.version = Typeguard::Validator::VERSION
   spec.authors = ['Tesorion']
   spec.email = ['QmanageDevelopment@tesorion.nl']
 
-  spec.summary = 'Validate YARD signatures'
+  spec.summary = 'Validate YARD and RBS type signatures'
   spec.homepage = 'https://github.com/tesorion/typeguard'
   spec.required_ruby_version = '>= 3.1'
 

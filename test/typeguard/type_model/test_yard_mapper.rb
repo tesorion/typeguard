@@ -2,13 +2,13 @@
 
 require 'test_helper'
 require 'yard'
-require 'yard/type_model/mapper/yard_mapper'
+require 'typeguard/type_model/mapper/yard_mapper'
 
-module Yard
+module Typeguard
   module Test
     class YardMapperTest < Minitest::Test
-      include Yard::TypeModel::Definitions
-      include Yard::TypeModel::Mapper
+      include Typeguard::TypeModel::Definitions
+      include Typeguard::TypeModel::Mapper
 
       def assert_node_equal(expected, actual)
         assert_equal expected.kind, actual.kind

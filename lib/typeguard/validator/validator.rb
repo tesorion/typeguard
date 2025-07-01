@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Yard
+module Typeguard
   module Validation
     class Validator
       def self.param_validator(types)

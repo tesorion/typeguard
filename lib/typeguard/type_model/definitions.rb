@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Yard
+module Typeguard
   module TypeModel
     module Definitions
       TypeNode = Struct.new(:kind, :shape, :children, :metadata, keyword_init: true)

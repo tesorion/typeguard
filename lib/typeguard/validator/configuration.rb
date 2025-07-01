@@ -2,7 +2,7 @@
 
 require 'dry-configurable'
 
-module Yard
+module Typeguard
   extend Dry::Configurable
 
   SUPPORTED_SOURCES = %i[yard rbs].freeze
@@ -27,33 +27,33 @@ module Yard
   }
 
   setting :resolution, reader: true do
-    Yard.setting_bool self, :raise_on_name_error
+    Typeguard.setting_bool self, :raise_on_name_error
   end
 
   setting :wrapping, reader: true do
-    Yard.setting_bool self, :raise_on_unexpected_arity
-    Yard.setting_bool self, :raise_on_unexpected_visibility
+    Typeguard.setting_bool self, :raise_on_unexpected_arity
+    Typeguard.setting_bool self, :raise_on_unexpected_visibility
   end
 
   setting :validation, reader: true do
-    Yard.setting_bool self, :raise_on_unexpected_argument
-    Yard.setting_bool self, :raise_on_unexpected_return
+    Typeguard.setting_bool self, :raise_on_unexpected_argument
+    Typeguard.setting_bool self, :raise_on_unexpected_return
   end
 
   setting :sqlite3, reader: true
 
   def self.process!
     unless config.enabled
-      puts 'WARNING: yard-validator disabled'
+      puts 'WARNING: typeguard disabled'
       return
     end
 
-    Yard::Metrics.config(config.validation, config.sqlite3)
-    Yard::TypeModel::Builder.send(config.source)
+    Typeguard::Metrics.config(config.validation, config.sqlite3)
+    Typeguard::TypeModel::Builder.send(config.source)
     builder = TypeModel::Builder::IMPLEMENTATION.new(config.target, config.reparse)
     definitions = builder.build
-    Yard::Resolution::Resolver.new(definitions, config.resolution).resolve!
-    Yard::Validation::Wrapper.new(definitions, config.wrapping).wrap!
-    at_exit { Yard::Metrics.flush } if config.at_exit_report
+    Typeguard::Resolution::Resolver.new(definitions, config.resolution).resolve!
+    Typeguard::Validation::Wrapper.new(definitions, config.wrapping).wrap!
+    at_exit { Typeguard::Metrics.flush } if config.at_exit_report
   end
 end

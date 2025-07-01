@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Yard
+module Typeguard
   module Metrics
     Log = Struct.new(:module, :definition, :type, :error, :expected, :actual, :source, :caller, keyword_init: true)
 
@@ -60,13 +60,13 @@ module Yard
 
     def self.flush
       new_line = "\n" unless @logs.empty?
-      puts "\nyard-validation errors [start]: #{@logs.length} #{new_line}\n"
+      puts "\ntypeguard errors [start]: #{@logs.length} #{new_line}\n"
       @logs.each { |log| puts format_log(log) }
-      puts "\nyard-validation errors [end]: #{@logs.length} #{new_line}"
+      puts "\ntypeguard errors [end]: #{@logs.length} #{new_line}"
       if @db
         upload_logs
         insertions = @db.total_changes
-        puts "\nyard-validation db insertions: #{insertions} #{new_line}"
+        puts "\ntypeguard db insertions: #{insertions} #{new_line}"
       end
       @logs.clear
     end

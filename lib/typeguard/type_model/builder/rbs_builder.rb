@@ -2,16 +2,16 @@
 
 require 'rbs'
 
-module Yard
+module Typeguard
   module TypeModel
     module Builder
       # Takes RBS signatures and returns a generic type model
       class RBSBuilder
-        include Yard::TypeModel::Definitions
+        include Typeguard::TypeModel::Definitions
 
         attr_reader :rbs_env
 
-        # @return [Yard::Initializer::RBSInitalizer] initializer for RBS signatures
+        # @return [Typeguard::Initializer::RBSInitalizer] initializer for RBS signatures
         def initialize(target, _reparse)
           rbs_loader = RBS::EnvironmentLoader.new(core_root: nil)
           rbs_loader.add(path: Pathname(target))
@@ -78,7 +78,7 @@ module Yard
 
         def build_types(rbs_type)
           if rbs_type
-            [Yard::TypeModel::Mapper::RBSMapper.parse_map(rbs_type)]
+            [Typeguard::TypeModel::Mapper::RBSMapper.parse_map(rbs_type)]
           else
             [TypeNode.new(
               kind: :untyped,

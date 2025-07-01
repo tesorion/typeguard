@@ -2,14 +2,14 @@
 
 require 'yard'
 
-module Yard
+module Typeguard
   module TypeModel
     module Builder
       # Takes YARD documentation and returns a generic type model
       class YardBuilder
-        include Yard::TypeModel::Definitions
+        include Typeguard::TypeModel::Definitions
 
-        # @see https://rubydoc.info/gems/yard/YARD/Registry
+        # @see https://rubydoc.info/gems/typeguard/YARD/Registry
         # @param reparse_files [Boolean] has no effect if target is a string.
         #   If false and target is an array, the files are only reparsed if no .yardoc is present.
         #   If true and target is an array, the files are always reparsed.
@@ -204,7 +204,7 @@ module Yard
 
         def build_types(tag)
           if tag.respond_to?(:types) && tag.types && !tag.types.empty?
-            tag.types.map { |t| Yard::TypeModel::Mapper::YardMapper.parse_map(t) }
+            tag.types.map { |t| Typeguard::TypeModel::Mapper::YardMapper.parse_map(t) }
           else
             result = TypeNode.new(
               kind: :untyped,
@@ -221,11 +221,11 @@ module Yard
         end
 
         def build_symbol
-          Yard::TypeModel::Mapper::YardMapper.parse_map('Symbol')
+          Typeguard::TypeModel::Mapper::YardMapper.parse_map('Symbol')
         end
 
         def build_fixed_hash(children)
-          node = Yard::TypeModel::Mapper::YardMapper.parse_map('Hash')
+          node = Typeguard::TypeModel::Mapper::YardMapper.parse_map('Hash')
           node.shape = :fixed_hash
           node.children = children
           node.metadata[:note] = 'Hash specified via @options'

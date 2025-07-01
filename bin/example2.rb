@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require_relative '../lib/yard/validator'
+require_relative '../lib/typeguard/validator'
 
 # rubocop:disable all
 
-class Fix
+class Example
   # The argument order is swapped, arguments are interpreted incorrectly
   # @param rhs [Integer]
   # @param lhs [String]
@@ -95,7 +95,7 @@ class Fix
   end
 end
 
-Yard.configure do |config|
+Typeguard.configure do |config|
   config.sqlite3 = 'test.db'
   # config.source = :rbs
   # config.target = 'sig'
@@ -111,15 +111,14 @@ Yard.configure do |config|
   config.validation.raise_on_unexpected_return = false
 end.process!
 
-puts
-f = Fix.new
-f.splat_arg(10, 1, 3)
-f.optional_arg(1)
-f.add_number_to_string('one', 2)
-f.keyword_arg(lhs: 1, rhs: 2)
-f.keyword_optional_arg(lhs: 2)
-f.kwargs_arg(subject: 'subj', body: 'b')
-f.mixed_keyword_arg(1, 2, lhs: 3, rhs: 4, a: 1, b: 2, c: 3, d: 4)
-f.optional_hash(Hash[b: 1], a: 1)
-f.optional_hash({}, a: 1)
-Fix.splat_arg(10, 1, 3.0)
+example = Example.new
+example.splat_arg(10, 1, 3)
+example.optional_arg(1)
+example.add_number_to_string('one', 2)
+example.keyword_arg(lhs: 1, rhs: 2)
+example.keyword_optional_arg(lhs: 2)
+example.kwargs_arg(subject: 'subj', body: 'b')
+example.mixed_keyword_arg(1, 2, lhs: 3, rhs: 4, a: 1, b: 2, c: 3, d: 4)
+example.optional_hash(Hash[b: 1], a: 1)
+example.optional_hash({}, a: 1)
+Example.splat_arg(10, 1, 3.0)
