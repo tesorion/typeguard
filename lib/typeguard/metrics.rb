@@ -6,7 +6,6 @@ module Typeguard
 
     @raise_on_unexpected_argument = false
     @raise_on_unexpected_return = false
-    @db = nil
     @logs = []
 
     def self.config(validation)
@@ -27,11 +26,6 @@ module Typeguard
       puts "\ntypeguard errors [start]: #{@logs.length} #{new_line}\n"
       @logs.each { |log| puts format_log(log) }
       puts "\ntypeguard errors [end]: #{@logs.length} #{new_line}"
-      if @db
-        upload_logs
-        insertions = @db.total_changes
-        puts "\ntypeguard db insertions: #{insertions} #{new_line}"
-      end
       @logs.clear
     end
 
