@@ -12,6 +12,7 @@ Gem::Specification.new do |spec|
   spec.homepage = 'https://github.com/tesorion/typeguard'
   spec.required_ruby_version = '>= 3.1'
 
+  spec.metadata['rubygems_mfa_required'] = 'true'
   spec.metadata['homepage_uri'] = spec.homepage
   spec.licenses = ['MIT']
 
